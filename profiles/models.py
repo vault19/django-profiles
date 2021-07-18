@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class Address(models.Model):
@@ -9,17 +10,26 @@ class Address(models.Model):
     postal_code = models.CharField(max_length=250)
     country = models.CharField(max_length=250)
 
+    def __str__(self):
+        return f"{self.city}"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user}"
+
 
 class School(models.Model):
     name = models.CharField(max_length=250)
-    description = models.TextField(help_text='Brief description about school.')
+    description = models.TextField(help_text=_('Brief description about school.'))
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership')
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Membership(models.Model):
@@ -27,4 +37,6 @@ class Membership(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     effective_from = models.DateField()
     effective_from = models.DateField()
-    invite_reason = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.school}: {self.user} ({self.effective_from - self.effective_to})"
