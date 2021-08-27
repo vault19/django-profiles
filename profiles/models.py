@@ -25,6 +25,7 @@ COUNTRY = (
     ('PL', _('Poland')),
 )
 
+
 class Address(models.Model):
     street = models.CharField(max_length=250)
     number = models.CharField(max_length=250)
@@ -45,7 +46,6 @@ class Profile(models.Model):
     about = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
 
-
     def __str__(self):
         return f"{self.user}"
 
@@ -64,7 +64,6 @@ class School(models.Model):
     school_code = models.CharField(max_length=50, blank=True, null=True)
     ineko_id = models.CharField(max_length=50, blank=True, null=True)
     underprivileged = models.IntegerField(blank=True, null=True)
-
 
     def __str__(self):
         return f"{self.name} – {self.address}"
