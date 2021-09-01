@@ -9,6 +9,8 @@ from profiles.forms import PasswordChangingForm
 
 # Create your views here.
 
+def my_profile(request):
+    return render(request, 'profiles/my_profile.html', {})
 
 # TODO change messages into slovak language
 def change_password(request):
