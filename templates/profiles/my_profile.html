@@ -17,69 +17,8 @@
       </div>
     </div>
   </section>
-  {{ form }}
-  <button type="submit">Save changes</button>
+{#  {{ form }}#}
+{#  <button type="submit">Save changes</button>#}
 </form>
 
-
-{#<div class="container">#}
-{#  <div class="row">#}
-{#    <div class="col">#}
-{#      <nav aria-label="breadcrumb" class="mt-2">#}
-{#        <ol class="breadcrumb">#}
-{#          <li class="breadcrumb-item"><a href="{% url 'all_active_runs' %}">Kurzy</a></li>#}
-{#        </ol>#}
-{#      </nav>#}
-{#    </div>#}
-{#  </div>#}
-{#</div>#}
-{##}
-{#  <section class="py-5 text-center container">#}
-{#    <div class="row py-lg-5">#}
-{#      <div class="col-lg-6 col-md-8 mx-auto">#}
-{#        <h2 class="fw-light">{{ chapter.title|upper }}</h2>#}
-{#        {% if chapter.length %}#}
-{#        <p class="lead text-muted">{{ start }} - {{ end }}</p>#}
-{#        {% endif %}#}
-{#      </div>#}
-{#    </div>#}
-{#  </section>#}
-
-{#  {% if chapter.description %}#}
-{#  <section class="bg-light">#}
-{#    <div class="py-5 container">#}
-{#      <div class="row">#}
-{#        <div class="col-12 mx-auto">#}
-{#          <p>{{ chapter.description|markdownify }}</p>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </section>#}
-{#  {% endif %}#}
-
-{#  {% if chapter.lecture_set.all %}#}
-{#  <div class="py-5 container">#}
-{#    <div class="row py-lg-5">#}
-{#      {% if user_submissions %}#}
-{#        {% for submission in user_submissions %}#}
-{#          <div class="col-12 mx-auto">#}
-{#            <b>{{ submission.title }}</b>#}
-{#          </div>#}
-{#          <div class="col-12 mx-auto">#}
-{#            <p>{{ submission.description|markdownify }}</p>#}
-{#          </div>#}
-{#        {% endfor %}#}
-{#      {% elif form %}#}
-{#      <form method="post">#}
-{#        <legend>{% translate "My Submission" %}</legend>#}
-{#        {% csrf_token %}#}
-{#        {{ form|as_bootstrap }}#}
-{#        <div class="form-actions">#}
-{#          <button type="submit" class="btn btn-primary">{% translate "Submit" %}</button>#}
-{#        </div>#}
-{#      </form>#}
-{#      {% endif %}#}
-{#    </div>#}
-{#  </div>#}
-{#  {% endif %}#}
 {% endblock %}
