@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect
 
-
 from profiles.models import Address
 from profiles.forms import PasswordChangingForm
 
@@ -12,9 +11,9 @@ from profiles.forms import PasswordChangingForm
 def my_profile(request):
     return render(request, 'profiles/my_profile.html', {})
 
+
 # TODO change messages into slovak language
 def change_password(request):
-
     if request.method == 'POST':
         form = PasswordChangingForm(request.user, request.POST)
         if form.is_valid():
@@ -27,5 +26,3 @@ def change_password(request):
     else:
         form = PasswordChangingForm(request.user)
     return render(request, 'profiles/change_password.html', {'form': form})
-
-
