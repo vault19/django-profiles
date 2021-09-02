@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -31,3 +32,11 @@ class AddressForm(ModelForm):
         model = Address
         fields = "__all__"
 
+
+class UserProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email"]
