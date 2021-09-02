@@ -38,6 +38,14 @@ class UserProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
 
+        self.fields["first_name"].label = _("First name")
+        self.fields["last_name"].label = _("Last name")
+        self.fields["email"].label = _("Email")
+
     class Meta:
         model = User
         fields = ["first_name", "last_name", "email"]
+
+
+class MembershipForm(ModelForm):
+    pass
