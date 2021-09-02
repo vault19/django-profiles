@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
@@ -8,7 +9,7 @@ from profiles.forms import PasswordChangingForm, AddressForm
 
 
 # Create your views here.
-
+@login_required
 def my_profile(request):
     profile_info = Profile.objects.get(user=request.user.pk)
     instance = get_object_or_404(Address, id=profile_info.pk)
@@ -21,6 +22,7 @@ def my_profile(request):
 
 
 # TODO change messages into slovak language
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangingForm(request.user, request.POST)
