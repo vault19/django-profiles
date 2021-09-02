@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import datetime
 
-
 ACCOUNT_TYPE = (
     ('PT', _('Primary School Teacher')),
     ('ST', _('Secondary School Teacher')),
@@ -40,11 +39,12 @@ class Address(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15)
-    gender = models.CharField(max_length=1, choices=GENDER)
-    account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPE)
-    about = models.TextField(blank=True, null=True)
-    country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
+
+    # phone_number = models.CharField(max_length=15)
+    # gender = models.CharField(max_length=1, choices=GENDER)
+    # account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPE)
+    # about = models.TextField(blank=True, null=True)
+    # country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
 
     def __str__(self):
         return f"{self.user}"
