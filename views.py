@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from profiles.models import Address, Profile
-from profiles.forms import PasswordChangingForm, AddressForm
+from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm
 
 
 # Create your views here.
@@ -18,7 +19,13 @@ def my_profile(request):
     if form.is_valid():
         form.save()
 
-    return render(request, 'profiles/my_profile.html', {"form": form})
+    user_instance = get_object_or_404(User, id=request.user.pk)
+    user_form = UserProfileForm(request.POST or None, instance=user_instance)
+
+    if user_form.is_valid():
+        user_form.save()
+
+    return render(request, 'profiles/my_profile.html', {"form": form, "user_form":user_form})
 
 
 # TODO change messages into slovak language
