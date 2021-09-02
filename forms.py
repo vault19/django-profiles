@@ -21,3 +21,5 @@ class AddressForm(ModelForm):
     class Meta:
         model = Address
         fields = "__all__"
+        for field in fields:
+            field.label = _(field.label)
