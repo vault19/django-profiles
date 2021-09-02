@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from profiles.models import Address, Profile
@@ -11,16 +11,13 @@ from profiles.forms import PasswordChangingForm, AddressForm
 
 def my_profile(request):
     profile_info = Profile.objects.get(user=request.user.pk)
-    address = profile_info.address
-    form = AddressForm(request.POST or None, instance=Address(street=address.street, number=address.number,
-                                                              city=address.city, postal_code=address.postal_code,
-                                                              country=address.country), auto_id=1)
+    instance = get_object_or_404(Address, id=profile_info.pk)
+    form = AddressForm(request.POST or None, instance=instance)
 
     if form.is_valid():
         form.save()
 
-    print("Profile info: ", profile_info.address.city)
-    return render(request, 'profiles/my_profile.html', {"context": form, "keket": profile_info})
+    return render(request, 'profiles/my_profile.html', {"form": form})
 
 
 # TODO change messages into slovak language

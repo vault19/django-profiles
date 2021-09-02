@@ -15,3 +15,9 @@ class PasswordChangingForm(PasswordChangeForm):
         self.fields['old_password'].label = _("Old password")
         self.fields['new_password1'].label = _("New Password")
         self.fields['new_password2'].label = _("Confirm new password")
+
+
+class AddressForm(ModelForm):
+    class Meta:
+        model = Address
+        fields = "__all__"
