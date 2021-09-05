@@ -39,12 +39,11 @@ class Address(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-
-    # phone_number = models.CharField(max_length=15)
-    # gender = models.CharField(max_length=1, choices=GENDER)
-    # account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPE)
-    # about = models.TextField(blank=True, null=True)
-    # country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
+    phone_number = models.CharField(max_length=15)
+    gender = models.CharField(max_length=1, choices=GENDER)
+    account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPE)
+    about = models.TextField(blank=True, null=True)
+    country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
 
     def __str__(self):
         return f"{self.user}"
@@ -72,7 +71,8 @@ class School(models.Model):
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    effective_from = models.DateField()
+    # effective_from = models.DateField(default=datetime.date.today())
+    effective_from = datetime.date
     effective_to = models.DateField(blank=True, null=True)
 
     def __str__(self):

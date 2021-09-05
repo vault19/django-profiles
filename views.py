@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.models import Address, Profile
-from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm
+from profiles.models import Address, Profile, Membership
+from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, MembershipForm, ProfileForm
 
 
 # Create your views here.
@@ -19,13 +19,25 @@ def my_profile(request):
     if form.is_valid():
         form.save()
 
+    print("ID: ", request.user.pk)
     user_instance = get_object_or_404(User, id=request.user.pk)
     user_form = UserProfileForm(request.POST or None, instance=user_instance)
 
     if user_form.is_valid():
         user_form.save()
 
-    return render(request, 'profiles/my_profile.html', {"form": form, "user_form":user_form})
+    membership_instance = get_object_or_404(Membership, id=request.user.pk)
+    membership_form = MembershipForm(request.POST or None, instance=membership_instance)
+
+    if membership_form.is_valid():
+        membership_form.save()
+
+    profile_instance = get_object_or_404(Profile, user_id=request.user.pk)
+    profile_form = ProfileForm(request.POST or None, instance=profile_instance)
+
+    return render(request, 'profiles/my_profile.html', {"form": form, "user_form": user_form,
+                                                        "membership_form": membership_form,
+                                                        "profile_form": profile_form})
 
 
 # TODO change messages into slovak language

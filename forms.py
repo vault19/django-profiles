@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.models import Address
+from profiles.models import Address, Membership, Profile
 
 
 class PasswordChangingForm(PasswordChangeForm):
@@ -29,6 +29,8 @@ class AddressForm(ModelForm):
         self.fields['postal_code'].label = _("Postal code")
         self.fields['country'].label = _("Country")
 
+        self.description = _("Address")
+
     class Meta:
         model = Address
         fields = "__all__"
@@ -42,10 +44,32 @@ class UserProfileForm(ModelForm):
         self.fields["last_name"].label = _("Last name")
         self.fields["email"].label = _("Email")
 
+        self.description = _("Personal")
+
     class Meta:
         model = User
         fields = ["first_name", "last_name", "email"]
 
 
 class MembershipForm(ModelForm):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+
+        self.fields["school"].label = _("School")
+
+        self.description = _("School")
+
+    class Meta:
+        model = Membership
+        fields = ["school"]
+
+
+class ProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ModelForm, self).__init__(*args, **kwargs)
+
+        self.fields["phone_number"].label = _("Phone number:")
+
+    class Meta:
+        model = Profile
+        fields = ["phone_number"]
