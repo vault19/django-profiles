@@ -1,5 +1,5 @@
 from django.contrib import admin
-from profiles.models import Profile, Address, School, Membership
+from profiles.profiles.models import Profile, Address, School, Membership
 
 
 class ProfileAdmin(admin.ModelAdmin):

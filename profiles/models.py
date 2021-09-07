@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import datetime
 
-
 ACCOUNT_TYPE = (
     ('PT', _('Primary School Teacher')),
     ('ST', _('Secondary School Teacher')),
@@ -72,7 +71,8 @@ class School(models.Model):
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    effective_from = models.DateField()
+    # effective_from = models.DateField(default=datetime.date.today())
+    effective_from = datetime.date
     effective_to = models.DateField(blank=True, null=True)
 
     def __str__(self):
