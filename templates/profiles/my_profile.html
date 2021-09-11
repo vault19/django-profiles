@@ -1,24 +1,55 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load markdownify %}
-{% load courses_extra %}
 {% load bootstrap_tags %}
 
 
 {% block content %}
-    <form method="post">
-  {% csrf_token %}
-          <section class="bg-light">
-    <div class="py-5 container">
-      <div class="row">
-        <div class="col-12 mx-auto">
-          <p>{{ form|markdownify }}</p>
-        </div>
+    <div class="row py-lg-5">
+      <div class="col-lg-10 col-md-8 mx-auto">
+        <h2 class="fw-light">{{ user_form.description }}</h2>
       </div>
     </div>
-  </section>
-{#  {{ form }}#}
-{#  <button type="submit">Save changes</button>#}
-</form>
 
+    <form method="post">
+        <div class="col-3 mx-auto py-2">
+            {% csrf_token %}
+            {{ user_form|as_bootstrap }}
+            {{ profile_form|as_bootstrap }}
+        </div>
+        <div class="col-3 mx-auto py-4 text-center">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">{% translate "Save" %}</button>
+        </div>
+    </form>
+
+    <div class="row py-lg-5">
+      <div class="col-lg-10 col-md-8 mx-auto">
+        <h2 class="fw-light">{{ form.description }}</h2>
+      </div>
+    </div>
+
+    <form method="post">
+        <div class="col-3 mx-auto py-2">
+            {% csrf_token %}
+            {{ form|as_bootstrap }}
+        </div>
+        <div class="col-3 mx-auto py-4 text-center">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">{% translate "Save" %}</button>
+        </div>
+    </form>
+
+    <div class="row py-lg-5">
+      <div class="col-lg-10 col-md-8 mx-auto">
+        <h2 class="fw-light">{{ membership_form.description }}</h2>
+      </div>
+    </div>
+
+    <form method="post">
+        <div class="col-3 mx-auto py-2">
+            {% csrf_token %}
+            {{ membership_form|as_bootstrap }}
+        </div>
+        <div class="col-3 mx-auto py-4 text-center">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">{% translate "Save" %}</button>
+        </div>
+    </form>
 {% endblock %}
