@@ -1,7 +1,10 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-import datetime
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 ACCOUNT_TYPE = (
     ('PT', _('Primary School Teacher')),
@@ -47,6 +50,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def update_profile_signal(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 
 class School(models.Model):
