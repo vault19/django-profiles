@@ -5,42 +5,47 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.profiles.models import Address, Profile, Membership
-from profiles.profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, MembershipForm, ProfileForm
+from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, MembershipForm, ProfileForm
 
 
 # Create your views here.
 @login_required
 def my_profile(request):
-    profile_info = Profile.objects.get(user=request.user.pk)
-    instance = get_object_or_404(Address, id=profile_info.pk)
-    form = AddressForm(request.POST or None, instance=instance)
+    user = get_object_or_404(User, id=request.user.pk)
 
-    if form.is_valid():
-        form.save()
+    user_form = UserProfileForm(instance=user)
+    profile_form = ProfileForm(instance=user.profile)
+    address_form = AddressForm(instance=user.profile.address)
 
-    print("ID: ", request.user.pk)
-    user_instance = get_object_or_404(User, id=request.user.pk)
-    user_form = UserProfileForm(request.POST or None, instance=user_instance)
+    # membership_form = MembershipForm(request.POST or None, instance=membership_instance)
 
-    if user_form.is_valid():
-        user_form.save()
+    if request.method == 'POST':
+        if 'save_profile' in request.POST:
+            user_form = UserProfileForm(request.POST, instance=user)
+            profile_form = ProfileForm(request.POST, instance=user.profile)
 
-    membership_instance = get_object_or_404(Membership, id=request.user.pk)
-    membership_form = MembershipForm(request.POST or None, instance=membership_instance)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
 
-    if membership_form.is_valid():
-        membership_form.save()
+        if 'save_address' in request.POST:
+            address_form = AddressForm(request.POST, instance=user.profile.address)
 
-    profile_instance = get_object_or_404(Profile, user_id=request.user.pk)
-    profile_form = ProfileForm(request.POST or None, instance=profile_instance)
+            if address_form.is_valid():
+                address_form.save()
 
-    if profile_form.is_valid():
-        profile_form.save()
+        # if membership_form.is_valid():
+        #     membership_form.save()
 
-    return render(request, 'profiles/my_profile.html', {"form": form, "user_form": user_form,
-                                                        "membership_form": membership_form,
-                                                        "profile_form": profile_form})
+
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+        "address_form": address_form,
+        # "membership_form": membership_form,
+    }
+
+    return render(request, 'profiles/profile.html', context=context)
 
 
 # TODO change messages into slovak language
@@ -57,4 +62,4 @@ def change_password(request):
             messages.error(request, _('Fix the error below, please!'))
     else:
         form = PasswordChangingForm(request.user)
-    return render(request, 'profiles/change_password.html', {'form': form})
+    return render(request, 'profiles/password_change_form.html', {'form': form})

@@ -38,12 +38,12 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15)
-    gender = models.CharField(max_length=1, choices=GENDER)
-    account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPE)
+    address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
+    phone_number = models.CharField(blank=True, null=True, max_length=15)
+    gender = models.CharField(blank=True, null=True, max_length=1, choices=GENDER)
+    account_type = models.CharField(blank=True, null=True, max_length=2, choices=ACCOUNT_TYPE)
     about = models.TextField(blank=True, null=True)
-    country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
+    country = models.CharField(blank=True, null=True, max_length=2, choices=COUNTRY, default='SK')
 
     def __str__(self):
         return f"{self.user}"
@@ -53,7 +53,7 @@ class School(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField(blank=True, null=True, help_text=_('Brief description about school.'))
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership')
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership', blank=True, null=True)
     district = models.CharField(max_length=50, blank=True, null=True)
     region = models.CharField(max_length=50, blank=True, null=True)
     founder = models.CharField(max_length=50, blank=True, null=True)

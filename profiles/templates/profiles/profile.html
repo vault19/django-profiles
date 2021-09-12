@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+
+
+{% block content %}
+<div class="album py-5 {# bg-light #}">
+  <div class="container">
+    <div class="row g-3">
+
+      <div class="col-6">
+        <form method="post">
+          {% csrf_token %}
+          {{ user_form|as_bootstrap }}
+          {{ profile_form|as_bootstrap }}
+
+          <div class="text-center">
+              <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_profile">{% translate "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-6">
+        <form method="post">
+          {% csrf_token %}
+          {{ address_form|as_bootstrap }}
+
+          <div class="text-center">
+              <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_address">{% translate "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+{##}
+{#    <div class="row py-lg-5">#}
+{#      <div class="col-lg-10 col-md-8 mx-auto">#}
+{#        <h2 class="fw-light">{{ membership_form.description }}</h2>#}
+{#      </div>#}
+{#    </div>#}
+{##}
+{#    <form method="post">#}
+{#        <div class="col-3 mx-auto py-2">#}
+{#            {% csrf_token %}#}
+{#            {{ membership_form|as_bootstrap }}#}
+{#        </div>#}
+{#        <div class="col-3 mx-auto py-4 text-center">#}
+{#            <button class="btn btn-lg btn-primary btn-block" type="submit">{% translate "Save" %}</button>#}
+{#        </div>#}
+{#    </form>#}
+{% endblock %}
