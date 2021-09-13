@@ -30,13 +30,12 @@ COUNTRY = (
 
 class Address(models.Model):
     street = models.CharField(max_length=250)
-    number = models.CharField(max_length=250)
     city = models.CharField(max_length=250)
     postal_code = models.CharField(max_length=250)
     country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
 
     def __str__(self):
-        return f"{self.street} {self.number}, {self.city} {self.postal_code} {self.country}"
+        return f"{self.street}, {self.city} {self.postal_code} {self.country}"
 
 
 class Profile(models.Model):
@@ -73,9 +72,13 @@ class School(models.Model):
     school_code = models.CharField(max_length=50, blank=True, null=True)
     ineko_id = models.CharField(max_length=50, blank=True, null=True)
     underprivileged = models.IntegerField(blank=True, null=True)
+    mail = models.CharField(blank=True, null=True, max_length=100)
+    mail2 = models.CharField(blank=True, null=True, max_length=100)
+    mail3 = models.CharField(blank=True, null=True, max_length=100)
+    website = models.CharField(blank=True, null=True, max_length=100)
 
     def __str__(self):
-        return f"{self.name} – {self.address}"
+        return f"{self.name} – {self.address} ({self.school_type})"
 
 
 class Membership(models.Model):

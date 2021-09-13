@@ -24,7 +24,6 @@ class AddressForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
 
         self.fields['street'].label = _("Street")
-        self.fields['number'].label = _("Number")
         self.fields['city'].label = _("City")
         self.fields['postal_code'].label = _("Postal code")
         self.fields['country'].label = _("Country")
