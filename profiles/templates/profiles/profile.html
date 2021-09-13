@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load bootstrap_tags %}
+{% load bootstrap5 %}
 
 
 {% block content %}
@@ -11,11 +11,11 @@
       <div class="col-6">
         <form method="post">
           {% csrf_token %}
-          {{ user_form|as_bootstrap }}
-          {{ profile_form|as_bootstrap }}
+          {% bootstrap_form user_form %}
+          {% bootstrap_form profile_form %}
 
           <div class="text-center">
-              <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_profile">{% translate "Save" %}</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_profile">{% translate "Save" %}</button>
           </div>
         </form>
       </div>
@@ -23,7 +23,7 @@
       <div class="col-6">
         <form method="post">
           {% csrf_token %}
-          {{ address_form|as_bootstrap }}
+          {% bootstrap_form address_form %}
 
           <div class="text-center">
               <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_address">{% translate "Save" %}</button>
