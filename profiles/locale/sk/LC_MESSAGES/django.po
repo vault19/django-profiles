@@ -1,0 +1,137 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-15 06:10+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n "
+">= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
+
+#: django-profiles/profiles/forms.py:16
+msgid "Old password"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:17
+msgid "New Password"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:18
+msgid "Confirm new password"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:26
+msgid "Street"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:27
+msgid "City"
+msgstr "Mesto"
+
+#: django-profiles/profiles/forms.py:28
+msgid "Postal code"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:29
+msgid "Country"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:31
+msgid "Address"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:42
+msgid "First name"
+msgstr "Meno"
+
+#: django-profiles/profiles/forms.py:43
+msgid "Last name"
+msgstr "Priezvisko"
+
+#: django-profiles/profiles/forms.py:44
+msgid "Email"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:46
+msgid "Personal"
+msgstr ""
+
+#: django-profiles/profiles/forms.py:57 django-profiles/profiles/forms.py:59
+msgid "School"
+msgstr ""
+
+#: django-profiles/profiles/models.py:10
+msgid "Primary School Teacher"
+msgstr ""
+
+#: django-profiles/profiles/models.py:11
+msgid "Secondary School Teacher"
+msgstr ""
+
+#: django-profiles/profiles/models.py:12
+msgid "Student"
+msgstr ""
+
+#: django-profiles/profiles/models.py:13
+msgid "Parent"
+msgstr ""
+
+#: django-profiles/profiles/models.py:14
+msgid "Lecturer"
+msgstr ""
+
+#: django-profiles/profiles/models.py:15
+msgid "Other"
+msgstr ""
+
+#: django-profiles/profiles/models.py:19
+msgid "Male"
+msgstr ""
+
+#: django-profiles/profiles/models.py:20
+msgid "Female"
+msgstr ""
+
+#: django-profiles/profiles/models.py:24
+msgid "Slovakia"
+msgstr ""
+
+#: django-profiles/profiles/models.py:25
+msgid "Czechia"
+msgstr ""
+
+#: django-profiles/profiles/models.py:26
+msgid "Hungary"
+msgstr ""
+
+#: django-profiles/profiles/models.py:27
+msgid "Poland"
+msgstr ""
+
+#: django-profiles/profiles/models.py:63
+msgid "Brief description about school."
+msgstr ""
+
+#: django-profiles/profiles/templates/profiles/password_change_form.html:12
+#: django-profiles/profiles/templates/profiles/profile.html:18
+#: django-profiles/profiles/templates/profiles/profile.html:29
+#: django-profiles/profiles/templates/registration/password_change_form.html:12
+msgid "Save"
+msgstr ""
+
+#: django-profiles/profiles/views.py:65
+msgid "Your password was successfully changed!"
+msgstr ""
+
+#: django-profiles/profiles/views.py:68
+msgid "Fix the error below, please!"
+msgstr ""
