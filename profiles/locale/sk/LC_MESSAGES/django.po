@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 06:10+0000\n"
+"POT-Creation-Date: 2021-09-16 20:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,15 +23,15 @@ msgstr ""
 
 #: django-profiles/profiles/forms.py:17
 msgid "New Password"
-msgstr ""
+msgstr "Nové heslo"
 
 #: django-profiles/profiles/forms.py:18
 msgid "Confirm new password"
-msgstr ""
+msgstr "Zopakujte nové heslo"
 
 #: django-profiles/profiles/forms.py:26
 msgid "Street"
-msgstr ""
+msgstr "Ulica a číslo"
 
 #: django-profiles/profiles/forms.py:27
 msgid "City"
@@ -39,11 +39,11 @@ msgstr "Mesto"
 
 #: django-profiles/profiles/forms.py:28
 msgid "Postal code"
-msgstr ""
+msgstr "Poštové smerovacie číslo"
 
 #: django-profiles/profiles/forms.py:29
 msgid "Country"
-msgstr ""
+msgstr "Krajina"
 
 #: django-profiles/profiles/forms.py:31
 msgid "Address"
@@ -67,55 +67,55 @@ msgstr ""
 
 #: django-profiles/profiles/forms.py:57 django-profiles/profiles/forms.py:59
 msgid "School"
-msgstr ""
+msgstr "Škola"
 
 #: django-profiles/profiles/models.py:10
 msgid "Primary School Teacher"
-msgstr ""
+msgstr "Učiteľ(ka) na základnej škole"
 
 #: django-profiles/profiles/models.py:11
 msgid "Secondary School Teacher"
-msgstr ""
+msgstr "Učiteľ(ka) na strednej školke"
 
 #: django-profiles/profiles/models.py:12
 msgid "Student"
-msgstr ""
+msgstr "Študent(ka)"
 
 #: django-profiles/profiles/models.py:13
 msgid "Parent"
-msgstr ""
+msgstr "Rodič"
 
 #: django-profiles/profiles/models.py:14
 msgid "Lecturer"
-msgstr ""
+msgstr "Lektor"
 
 #: django-profiles/profiles/models.py:15
 msgid "Other"
-msgstr ""
+msgstr "Iné"
 
 #: django-profiles/profiles/models.py:19
 msgid "Male"
-msgstr ""
+msgstr "Muž"
 
 #: django-profiles/profiles/models.py:20
 msgid "Female"
-msgstr ""
+msgstr "Žena"
 
 #: django-profiles/profiles/models.py:24
 msgid "Slovakia"
-msgstr ""
+msgstr "Slovensko"
 
 #: django-profiles/profiles/models.py:25
 msgid "Czechia"
-msgstr ""
+msgstr "Česko"
 
 #: django-profiles/profiles/models.py:26
 msgid "Hungary"
-msgstr ""
+msgstr "Maďarsko"
 
 #: django-profiles/profiles/models.py:27
 msgid "Poland"
-msgstr ""
+msgstr "Poľsko"
 
 #: django-profiles/profiles/models.py:63
 msgid "Brief description about school."
@@ -128,10 +128,10 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: django-profiles/profiles/views.py:65
+#: django-profiles/profiles/views.py:59
 msgid "Your password was successfully changed!"
 msgstr ""
 
-#: django-profiles/profiles/views.py:68
+#: django-profiles/profiles/views.py:62
 msgid "Fix the error below, please!"
 msgstr ""
