@@ -1,9 +1,9 @@
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, Form, ModelChoiceField
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.models import Address, Membership, Profile
+from profiles.models import Address, Membership, Profile, School
 
 
 class PasswordChangingForm(PasswordChangeForm):
@@ -50,17 +50,8 @@ class UserProfileForm(ModelForm):
         fields = ["first_name", "last_name", "email"]
 
 
-class MembershipForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ModelForm, self).__init__(*args, **kwargs)
-
-        self.fields["school"].label = _("School")
-
-        self.description = _("School")
-
-    class Meta:
-        model = Membership
-        fields = ["school"]
+class SchoolForm(Form):
+    school = ModelChoiceField(queryset=School.objects.all().values_list('name', flat=True))
 
 
 class ProfileForm(ModelForm):

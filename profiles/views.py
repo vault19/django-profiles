@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, MembershipForm, ProfileForm
+from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, SchoolForm, ProfileForm
 
 
 # Create your views here.
@@ -16,8 +16,7 @@ def my_profile(request):
     user_form = UserProfileForm(instance=user)
     profile_form = ProfileForm(instance=user.profile)
     address_form = AddressForm(instance=user.profile.address)
-
-    # membership_form = MembershipForm(request.POST or None, instance=membership_instance)
+    membership_form = SchoolForm()
 
     if request.method == 'POST':
         if 'save_profile' in request.POST:
@@ -34,15 +33,17 @@ def my_profile(request):
             if address_form.is_valid():
                 address_form.save()
 
-        # if membership_form.is_valid():
-        #     membership_form.save()
+        if 'save_membership' in request.POST:
+            membership_form = SchoolForm(request.POST)
 
+            if membership_form.is_valid():
+                membership_form.save()
 
     context = {
         "user_form": user_form,
         "profile_form": profile_form,
         "address_form": address_form,
-        # "membership_form": membership_form,
+        "membership_form": membership_form,
     }
 
     return render(request, 'profiles/profile.html', context=context)

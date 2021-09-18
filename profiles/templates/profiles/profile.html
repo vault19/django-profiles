@@ -8,7 +8,8 @@
   <div class="container">
     <div class="row g-3">
 
-      <div class="col-6">
+      <div class="col-6 col-md-12">
+        <p>
         <form method="post">
           {% csrf_token %}
           {% bootstrap_form user_form %}
@@ -18,9 +19,11 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_profile">{% translate "Save" %}</button>
           </div>
         </form>
+        </p>
       </div>
 
-      <div class="col-6">
+      <div class="col-6 col-md-12">
+        <p>
         <form method="post">
           {% csrf_token %}
           {% bootstrap_form address_form %}
@@ -29,22 +32,19 @@
               <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_address">{% translate "Save" %}</button>
           </div>
         </form>
+        </p>
+        <p>
+        <form method="post">
+          {% csrf_token %}
+          {% bootstrap_form membership_form %}
+          <div class="text-center">
+              <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_membership">{% translate "Save" %}</button>
+          </div>
+        </form>
+        </p>
       </div>
 
-{##}
-{#    <div class="row py-lg-5">#}
-{#      <div class="col-lg-10 col-md-8 mx-auto">#}
-{#        <h2 class="fw-light">{{ membership_form.description }}</h2>#}
-{#      </div>#}
-{#    </div>#}
-{##}
-{#    <form method="post">#}
-{#        <div class="col-3 mx-auto py-2">#}
-{#            {% csrf_token %}#}
-{#            {{ membership_form|as_bootstrap }}#}
-{#        </div>#}
-{#        <div class="col-3 mx-auto py-4 text-center">#}
-{#            <button class="btn btn-lg btn-primary btn-block" type="submit">{% translate "Save" %}</button>#}
-{#        </div>#}
-{#    </form>#}
+    </div>
+  </div>
+</div>
 {% endblock %}

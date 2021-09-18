@@ -2,6 +2,7 @@ import datetime
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -62,7 +63,7 @@ class School(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField(blank=True, null=True, help_text=_('Brief description about school.'))
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership', blank=True, null=True)
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership', blank=True)
     district = models.CharField(max_length=50, blank=True, null=True)
     region = models.CharField(max_length=50, blank=True, null=True)
     founder = models.CharField(max_length=50, blank=True, null=True)
@@ -84,10 +85,9 @@ class School(models.Model):
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    # effective_from = models.DateField(default=datetime.date.today())
-    effective_from = datetime.date
+    effective_from = models.DateField(blank=True, null=True)
     effective_to = models.DateField(blank=True, null=True)
+    replaced_by = models.ForeignKey('self', on_delete=models.CASCADE)
 
     def __str__(self):
-        effective_to = self.effective_to if self.effective_to else datetime.date.today()
-        return f"{self.school}: {self.user} ({effective_to - self.effective_from})"
+        return f"{self.school}: {self.user}"
