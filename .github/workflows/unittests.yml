@@ -18,4 +18,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run unit tests 
       run: |
-        pytest profiles/tests.py
+        pytest tests.py
