@@ -1,5 +1,8 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import datetime
 
@@ -27,7 +30,6 @@ COUNTRY = (
 
 class Address(models.Model):
     street = models.CharField(max_length=250)
-    number = models.CharField(max_length=250)
     city = models.CharField(max_length=250)
     postal_code = models.CharField(max_length=250)
     country = models.CharField(max_length=2, choices=COUNTRY, default="SK")
@@ -38,15 +40,22 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15)
-    gender = models.CharField(max_length=1, choices=GENDER)
-    account_type = models.CharField(max_length=2, choices=ACCOUNT_TYPE)
+    address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
+    phone_number = models.CharField(blank=True, null=True, max_length=15)
+    gender = models.CharField(blank=True, null=True, max_length=1, choices=GENDER)
+    account_type = models.CharField(blank=True, null=True, max_length=2, choices=ACCOUNT_TYPE)
     about = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=2, choices=COUNTRY, default="SK")
 
     def __str__(self):
         return f"{self.user}"
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def update_profile_signal(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 
 class School(models.Model):
@@ -63,9 +72,13 @@ class School(models.Model):
     school_code = models.CharField(max_length=50, blank=True, null=True)
     ineko_id = models.CharField(max_length=50, blank=True, null=True)
     underprivileged = models.IntegerField(blank=True, null=True)
+    mail = models.CharField(blank=True, null=True, max_length=100)
+    mail2 = models.CharField(blank=True, null=True, max_length=100)
+    mail3 = models.CharField(blank=True, null=True, max_length=100)
+    website = models.CharField(blank=True, null=True, max_length=100)
 
     def __str__(self):
-        return f"{self.name} – {self.address}"
+        return f"{self.name} – {self.address} ({self.school_type})"
 
 
 class Membership(models.Model):
@@ -74,6 +87,7 @@ class Membership(models.Model):
     # effective_from = models.DateField(default=datetime.date.today())
     effective_from = datetime.date
     effective_to = models.DateField(blank=True, null=True)
+    replaced_by = models.ForeignKey('self', on_delete=models.CASCADE)
 
     def __str__(self):
         effective_to = self.effective_to if self.effective_to else datetime.date.today()

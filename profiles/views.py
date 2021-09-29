@@ -13,6 +13,7 @@ from profiles.profiles.forms import MembershipForm
 from profiles.profiles.forms import ProfileForm
 
 
+
 # Create your views here.
 @login_required
 def my_profile(request):
@@ -49,6 +50,7 @@ def my_profile(request):
     )
 
 
+
 # TODO change messages into slovak language
 @login_required
 def change_password(request):
@@ -64,3 +66,4 @@ def change_password(request):
     else:
         form = PasswordChangingForm(request.user)
     return render(request, "profiles/change_password.html", {"form": form})
+
