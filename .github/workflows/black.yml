@@ -22,4 +22,4 @@ jobs:
         pip install black
     - name: Format the code with black
       run: |
-        black --diff --check --color -l 120 -t py39 .
+        black --exclude="migrations/" --diff --check --color -l 120 -t py39 .
