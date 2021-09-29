@@ -19,7 +19,7 @@ class PasswordChangingForm(PasswordChangeForm):
 
 
 class AddressForm(ModelForm):
-  
+
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
 
