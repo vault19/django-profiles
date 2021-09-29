@@ -33,11 +33,13 @@ class Address(models.Model):
     country = models.CharField(max_length=2, choices=COUNTRY, default='SK')
 
     def __str__(self):
-        return f"{self.street} {self.number}, {self.city} {self.postal_code} {self.country}"
+        return f"{self.street} {self.number}, {self.city} " \
+               f"{self.postal_code} {self.country}"
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15)
     gender = models.CharField(max_length=1, choices=GENDER)
@@ -51,9 +53,12 @@ class Profile(models.Model):
 
 class School(models.Model):
     name = models.CharField(max_length=250)
-    description = models.TextField(blank=True, null=True, help_text=_('Brief description about school.'))
+    description = models.TextField(blank=True, null=True,
+                                   help_text=
+                                   _('Brief description about school.'))
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership')
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     through='Membership')
     district = models.CharField(max_length=50, blank=True, null=True)
     region = models.CharField(max_length=50, blank=True, null=True)
     founder = models.CharField(max_length=50, blank=True, null=True)
@@ -69,12 +74,15 @@ class School(models.Model):
 
 
 class Membership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     # effective_from = models.DateField(default=datetime.date.today())
     effective_from = datetime.date
     effective_to = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        effective_to = self.effective_to if self.effective_to else datetime.date.today()
-        return f"{self.school}: {self.user} ({effective_to - self.effective_from})"
+        effective_to = self.effective_to if self.effective_to \
+            else datetime.date.today()
+        return f"{self.school}: {self.user} " \
+               f"({effective_to - self.effective_from})"
