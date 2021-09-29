@@ -5,62 +5,65 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, SchoolForm, ProfileForm
+from profiles.profiles.models import Address, Profile, Membership
+from profiles.profiles.forms import PasswordChangingForm
+from profiles.profiles.forms import AddressForm
+from profiles.profiles.forms import UserProfileForm
+from profiles.profiles.forms import MembershipForm
+from profiles.profiles.forms import ProfileForm
+
 
 
 # Create your views here.
 @login_required
 def my_profile(request):
-    user = get_object_or_404(User, id=request.user.pk)
+    profile_info = Profile.objects.get(user=request.user.pk)
+    instance = get_object_or_404(Address, id=profile_info.pk)
+    form = AddressForm(request.POST or None, instance=instance)
 
-    user_form = UserProfileForm(instance=user)
-    profile_form = ProfileForm(instance=user.profile)
-    address_form = AddressForm(instance=user.profile.address)
-    membership_form = SchoolForm()
+    if form.is_valid():
+        form.save()
 
-    if request.method == 'POST':
-        if 'save_profile' in request.POST:
-            user_form = UserProfileForm(request.POST, instance=user)
-            profile_form = ProfileForm(request.POST, instance=user.profile)
+    print("ID: ", request.user.pk)
+    user_instance = get_object_or_404(User, id=request.user.pk)
+    user_form = UserProfileForm(request.POST or None, instance=user_instance)
 
-            if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
+    if user_form.is_valid():
+        user_form.save()
 
-        if 'save_address' in request.POST:
-            address_form = AddressForm(request.POST, instance=user.profile.address)
+    membership_instance = get_object_or_404(Membership, id=request.user.pk)
+    membership_form = MembershipForm(request.POST or None, instance=membership_instance)
 
-            if address_form.is_valid():
-                address_form.save()
+    if membership_form.is_valid():
+        membership_form.save()
 
-        if 'save_membership' in request.POST:
-            membership_form = SchoolForm(request.POST)
+    profile_instance = get_object_or_404(Profile, user_id=request.user.pk)
+    profile_form = ProfileForm(request.POST or None, instance=profile_instance)
 
-            if membership_form.is_valid():
-                membership_form.save()
+    if profile_form.is_valid():
+        profile_form.save()
 
-    context = {
-        "user_form": user_form,
-        "profile_form": profile_form,
-        "address_form": address_form,
-        "membership_form": membership_form,
-    }
+    return render(
+        request,
+        "profiles/my_profile.html",
+        {"form": form, "user_form": user_form, "membership_form": membership_form, "profile_form": profile_form},
+    )
 
-    return render(request, 'profiles/profile.html', context=context)
 
 
 # TODO change messages into slovak language
 @login_required
 def change_password(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PasswordChangingForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, _('Your password was successfully changed!'))
-            return redirect('change_password')
+            messages.success(request, _("Your password was successfully changed!"))
+            return redirect("change_password")
         else:
-            messages.error(request, _('Fix the error below, please!'))
+            messages.error(request, _("Fix the error below, please!"))
     else:
         form = PasswordChangingForm(request.user)
-    return render(request, 'profiles/password_change_form.html', {'form': form})
+    return render(request, "profiles/change_password.html", {"form": form})
+
