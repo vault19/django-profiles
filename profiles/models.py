@@ -54,8 +54,8 @@ class Profile(models.Model):
 class School(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField(blank=True, null=True,
-                                   help_text=
-                                   _('Brief description about school.'))
+                                   help_text=_(
+                                       'Brief description about school.'))
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      through='Membership')
