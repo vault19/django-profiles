@@ -44,6 +44,8 @@ class Profile(models.Model):
     account_type = models.CharField(max_length=2, verbose_name=_("Account type"), blank=True, null=True,
                                     choices=ACCOUNT_TYPE)
     about = models.TextField(blank=True, null=True, verbose_name=_("About me"))
+    metadata = models.JSONField(blank=True, null=True, verbose_name=_("Metadata"),
+                                help_text=_("Metadata about user."))
     country = models.CharField(blank=True, null=True, max_length=2, choices=COUNTRY, default='SK',
                                verbose_name=_("Country"))
 
