@@ -1,14 +1,16 @@
+import datetime
+
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from profiles.forms import PasswordChangingForm, AddressForm, UserProfileForm, SchoolForm, ProfileForm
+from profiles.forms import AddressForm, UserProfileForm, SchoolForm, ProfileForm
+from profiles.models import School, Membership
 
 
-# Create your views here.
 @login_required
 def my_profile(request):
     user = get_object_or_404(User, id=request.user.pk)
@@ -16,7 +18,6 @@ def my_profile(request):
     user_form = UserProfileForm(instance=user)
     profile_form = ProfileForm(instance=user.profile)
     address_form = AddressForm(instance=user.profile.address)
-    membership_form = SchoolForm()
 
     if request.method == 'POST':
         if 'save_profile' in request.POST:
@@ -27,40 +28,70 @@ def my_profile(request):
                 user_form.save()
                 profile_form.save()
 
+                messages.success(request, _("Your profile has been saved."))
+                return redirect("profile")
+
         if 'save_address' in request.POST:
             address_form = AddressForm(request.POST, instance=user.profile.address)
 
             if address_form.is_valid():
-                address_form.save()
+                address = address_form.save()
+                user.profile.address = address
+                user.profile.save()
 
-        if 'save_membership' in request.POST:
+                messages.success(request, _("Your address has been saved."))
+                return redirect("profile")
+
+        if 'save_school' in request.POST:
             membership_form = SchoolForm(request.POST)
 
             if membership_form.is_valid():
-                membership_form.save()
+                school_id = membership_form.cleaned_data['school_id']
+                school = School.objects.get(id=school_id)
+
+                memberships = Membership.objects.filter(user=request.user)
+
+                if memberships.count() == 0:
+                    m = Membership(user=request.user, school=school, effective_from=datetime.datetime.now())
+                    m.save()
+                else:
+                    for membership in memberships.all():
+                        if membership.replaced_by is None and membership.school != school:
+                            m = Membership(user=request.user, school=school, effective_from=datetime.datetime.now(),
+                                           replaced_by=None)
+                            m.save()
+
+                            membership.effective_to = datetime.datetime.now()
+                            membership.replaced_by = m
+                            membership.save()
+                            break
+
+                messages.success(request, _("Your school has been saved."))
+                return redirect("profile")
 
     context = {
+        "breadcrumbs": [
+            {
+                "title": _("My Profile"),
+            },
+        ],
         "user_form": user_form,
         "profile_form": profile_form,
         "address_form": address_form,
-        "membership_form": membership_form,
     }
 
     return render(request, 'profiles/profile.html', context=context)
 
 
-# TODO change messages into slovak language
 @login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangingForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, _('Your password was successfully changed!'))
-            return redirect('change_password')
-        else:
-            messages.error(request, _('Fix the error below, please!'))
-    else:
-        form = PasswordChangingForm(request.user)
-    return render(request, 'profiles/password_change_form.html', {'form': form})
+def search_school(request):
+    context = {}
+
+    if request.method == 'POST' and 'search' in request.POST:
+        schools = School.objects.filter(Q(name__icontains=request.POST['search']) |
+                                        Q(district__icontains=request.POST['search']) |
+                                        Q(address__street__icontains=request.POST['search'])).filter().all()
+
+        context['schools'] = schools
+
+    return render(request, 'profiles/school_search.html', context=context)

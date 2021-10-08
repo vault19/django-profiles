@@ -2,49 +2,191 @@
 {% load i18n %}
 {% load bootstrap5 %}
 
+{% block breadcrumbs %}
+  {% include "courses/includes/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+  document.body.addEventListener('htmx:configRequest', (event) => {
+    event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+  })
+</script>
+{% endblock %}
 
 {% block content %}
-<div class="album py-5 {# bg-light #}">
-  <div class="container">
-    <div class="row g-3">
-
-      <div class="col-6 col-md-12">
-        <p>
-        <form method="post">
-          {% csrf_token %}
-          {% bootstrap_form user_form %}
-          {% bootstrap_form profile_form %}
-
-          <div class="text-center">
-            <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_profile">{% translate "Save" %}</button>
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="profileModalLabel">{% translate "Edit Profile" %}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% translate "Close" %}"></button>
           </div>
-        </form>
-        </p>
-      </div>
-
-      <div class="col-6 col-md-12">
-        <p>
-        <form method="post">
-          {% csrf_token %}
-          {% bootstrap_form address_form %}
-
-          <div class="text-center">
-              <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_address">{% translate "Save" %}</button>
+          <div class="modal-body">
+            {% bootstrap_form user_form %}
+            {% bootstrap_form profile_form %}
           </div>
-        </form>
-        </p>
-        <p>
-        <form method="post">
-          {% csrf_token %}
-          {% bootstrap_form membership_form %}
-          <div class="text-center">
-              <button class="btn btn-lg btn-primary btn-block" type="submit" name="save_membership">{% translate "Save" %}</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% translate "Close" %}</button>
+            <button class="btn btn-primary btn-block" type="submit"  name="save_profile">
+              <i class="fas fa-save"></i> {% translate "Save" %}
+            </button>
           </div>
-        </form>
-        </p>
-      </div>
-
+        </div>
+      </form>
     </div>
   </div>
-</div>
+
+  <!-- Address Modal -->
+  <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addressModalLabel">{% translate "Edit Address" %}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% translate "Close" %}"></button>
+          </div>
+          <div class="modal-body">
+            {% bootstrap_form address_form %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% translate "Close" %}</button>
+            <button class="btn btn-primary btn-block" type="submit" name="save_address">
+              <i class="fas fa-save"></i> {% translate "Save" %}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- School Modal -->
+  <div class="modal fade" id="schoolModal" tabindex="-1" aria-labelledby="schoolModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="schoolModalLabel">{% translate "Search School" %}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% translate "Close" %}"></button>
+          </div>
+          <div class="modal-body">
+
+            <span class="htmx-indicator">
+              <i class="fas fa-spinner fa-spin"></i> {% translate "Searching..." %}
+            </span>
+
+            <input class="form-control" type="text"
+                   name="search" placeholder="{% translate "Begin typing (name or address) to search schools..." %}"
+                   hx-post="{% url 'search_school' %}"
+                   hx-trigger="keyup changed delay:500ms"
+                   hx-target="#search-results"
+                   hx-indicator=".htmx-indicator">
+
+            <table class="table">
+                <thead>
+                <tr>
+                  <th></th>
+                  <th>{% translate "Name" %}</th>
+                  <th>{% translate "Street" %}</th>
+                  <th>{% translate "City" %}</th>
+                  <th>{% translate "School code" %}</th>
+                </tr>
+                </thead>
+                <tbody id="search-results">
+                </tbody>
+            </table>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% translate "Close" %}</button>
+            <button class="btn btn-primary btn-block" type="submit" name="save_school">
+              <i class="fas fa-save"></i> {% translate "Save" %}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="album py-5 {# bg-light #}">
+    <div class="container">
+      <div class="row g-3">
+
+        <div class="col-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{% translate "My Profile" %}</h5>
+              <p class="card-text">
+                {% translate "Username" %}: {{ request.user.username }}<br />
+                {{ request.user.first_name }} {{ request.user.last_name }}<br />
+                {{ request.user.email }}<br />
+                {{ request.user.profile.phone_number }}<br />
+                {{ request.user.profile.get_account_type_display }}<br />
+                {{ request.user.profile.get_gender_display }}<br />
+                {% if request.user.profile.about %}
+                <p>{{ request.user.profile.about }}</p>
+                {% endif %}
+              </p>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profileModal">
+                {% translate "Edit Profile" %}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{% translate "My Address" %}</h5>
+              <p class="card-text">
+                {{ request.user.profile.address.street }}<br />
+                {{ request.user.profile.address.postal_code }} {{ request.user.profile.address.city }}<br />
+                {{ request.user.profile.address.get_country_display }}<br />
+              </p>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
+                {% translate "Edit Address" %}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{% translate "My School" %}</h5>
+              <p class="card-text">
+                {% for membership in request.user.membership_set.all %}
+                  {% if not membership.replaced_by %}
+                    {{ membership.school.name }}<br />
+                    {{ membership.school.address.street }}<br />
+                    {{ membership.school.address.postal_code }} {{ membership.school.address.city }}<br />
+                    {{ membership.school.address.get_country_display }}<br />
+                    {% if membership.school.website|first in 'http' %}
+                      <a href="{{ membership.school.website }}" target="_blank" >{{ membership.school.website }}</a>
+                    {% elif membership.school.website %}
+                      <a href="http://{{ membership.school.website }}" target="_blank" >{{ membership.school.website }}</a>
+                    {% endif %}<br />
+
+                    {% translate "School code" %}: {{ membership.school.school_code }}<br />
+                  {% endif %}
+                {% endfor %}
+              </p>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#schoolModal">
+                {% translate "Edit School" %}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 {% endblock %}

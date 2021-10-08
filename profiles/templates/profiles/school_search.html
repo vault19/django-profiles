@@ -1,0 +1,9 @@
+{% for school in schools %}
+<tr>
+  <td> <input type="radio" name="school_id" value="{{ school.id }}"></td>
+  <td>{{ school.name }}</td>
+  <td>{{ school.address.street }}</td>
+  <td>{{ school.district }}</td>
+  <td>{{ school.school_code }}</td>
+</tr>
+{% endfor %}
