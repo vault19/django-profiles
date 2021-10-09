@@ -125,9 +125,9 @@
                 {% translate "Username" %}: {{ request.user.username }}<br />
                 {{ request.user.first_name }} {{ request.user.last_name }}<br />
                 {{ request.user.email }}<br />
-                {{ request.user.profile.phone_number }}<br />
-                {{ request.user.profile.get_account_type_display }}<br />
-                {{ request.user.profile.get_gender_display }}<br />
+                {% if request.user.profile.phone_number %}{{ request.user.profile.phone_number }}<br />{% endif %}
+                {% if request.user.profile.account_type %}{{ request.user.profile.get_account_type_display }}<br />{% endif %}
+                {% if request.user.profile.gender %}{{ request.user.profile.get_gender_display|default_if_none:"" }}<br />{% endif %}
                 {% if request.user.profile.about %}
                 <p>{{ request.user.profile.about }}</p>
                 {% endif %}
