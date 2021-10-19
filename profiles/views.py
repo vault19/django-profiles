@@ -90,7 +90,10 @@ def search_school(request):
     if request.method == 'POST' and 'search' in request.POST:
         schools = School.objects.filter(Q(name__icontains=request.POST['search']) |
                                         Q(district__icontains=request.POST['search']) |
-                                        Q(address__street__icontains=request.POST['search'])).filter().all()
+                                        Q(address__street__icontains=request.POST['search']) |
+                                        Q(school_code__icontains=request.POST['search']) |
+                                        Q(ineko_id__icontains=request.POST['search'])
+                                        ).filter().all()
 
         context['schools'] = schools
 
