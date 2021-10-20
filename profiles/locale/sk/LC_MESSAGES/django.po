@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-19 06:14+0200\n"
+"POT-Creation-Date: 2021-10-20 05:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,11 +65,12 @@ msgstr "Maďarsko"
 msgid "Poland"
 msgstr "Poľsko"
 
-#: profiles/models.py:30 profiles/templates/profiles/profile.html:95
+#: profiles/models.py:30 profiles/templates/profiles/profile.html:93
+#: profiles/templates/profiles/profile.html:103
 msgid "Street"
 msgstr "Ulica a číslo"
 
-#: profiles/models.py:31 profiles/templates/profiles/profile.html:96
+#: profiles/models.py:31 profiles/templates/profiles/profile.html:104
 msgid "City"
 msgstr "Mesto"
 
@@ -106,6 +107,7 @@ msgid "Metadata about user."
 msgstr ""
 
 #: profiles/models.py:64 profiles/templates/profiles/profile.html:94
+#: profiles/templates/profiles/profile.html:102
 msgid "Name"
 msgstr "Názov"
 
@@ -141,8 +143,9 @@ msgstr ""
 msgid "GPS Y"
 msgstr ""
 
-#: profiles/models.py:75 profiles/templates/profiles/profile.html:97
-#: profiles/templates/profiles/profile.html:177
+#: profiles/models.py:75 profiles/templates/profiles/profile.html:92
+#: profiles/templates/profiles/profile.html:105
+#: profiles/templates/profiles/profile.html:185
 msgid "School code"
 msgstr "Kód školy"
 
@@ -179,7 +182,7 @@ msgid "Replaced by"
 msgstr ""
 
 #: profiles/templates/profiles/profile.html:25
-#: profiles/templates/profiles/profile.html:137
+#: profiles/templates/profiles/profile.html:145
 msgid "Edit Profile"
 msgstr "Zmeň Profil"
 
@@ -188,18 +191,18 @@ msgstr "Zmeň Profil"
 #: profiles/templates/profiles/profile.html:51
 #: profiles/templates/profiles/profile.html:57
 #: profiles/templates/profiles/profile.html:75
-#: profiles/templates/profiles/profile.html:106
+#: profiles/templates/profiles/profile.html:114
 msgid "Close"
 msgstr "Zavrieť"
 
 #: profiles/templates/profiles/profile.html:35
 #: profiles/templates/profiles/profile.html:59
-#: profiles/templates/profiles/profile.html:108
+#: profiles/templates/profiles/profile.html:116
 msgid "Save"
 msgstr "Uložiť"
 
 #: profiles/templates/profiles/profile.html:50
-#: profiles/templates/profiles/profile.html:154
+#: profiles/templates/profiles/profile.html:162
 msgid "Edit Address"
 msgstr "Zmeň Adresu"
 
@@ -211,29 +214,33 @@ msgstr "Vyhľadaj Školu"
 msgid "Searching..."
 msgstr "Vyhľadávam..."
 
-#: profiles/templates/profiles/profile.html:84
+#: profiles/templates/profiles/profile.html:88
 msgid ""
-"To search for school begin with typing name or address or school code or "
-"Ineko ID..."
-msgstr "Pre vyhľadanie školy začnite písať názov alebo adresu alebo kód školy alebo Ineko ID..."
+"To search for your school begin with typing school code or address or name..."
+msgstr ""
+"Pre vyhľadanie školy začnite písať kód školy, adresu, alebo názov..."
 
-#: profiles/templates/profiles/profile.html:123 profiles/views.py:75
+#: profiles/templates/profiles/profile.html:90
+msgid "You can search your school by:"
+msgstr "Môžete vyhľadávať podľa:"
+
+#: profiles/templates/profiles/profile.html:131 profiles/views.py:75
 msgid "My Profile"
 msgstr "Môj Profil"
 
-#: profiles/templates/profiles/profile.html:125
+#: profiles/templates/profiles/profile.html:133
 msgid "Username"
 msgstr "Používateľské meno"
 
-#: profiles/templates/profiles/profile.html:146
+#: profiles/templates/profiles/profile.html:154
 msgid "My Address"
 msgstr "Moja Adresa"
 
-#: profiles/templates/profiles/profile.html:163
+#: profiles/templates/profiles/profile.html:171
 msgid "My School"
 msgstr "Moja Škola"
 
-#: profiles/templates/profiles/profile.html:183
+#: profiles/templates/profiles/profile.html:191
 msgid "Edit School"
 msgstr "Zmeň Školu"
 

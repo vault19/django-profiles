@@ -80,12 +80,20 @@
               <i class="fas fa-spinner fa-spin"></i> {% translate "Searching..." %}
             </span>
 
-            <input class="form-control" type="text"
-                   name="search" placeholder="{% translate "To search for school begin with typing name or address or school code or Ineko ID..." %}"
+            <input class="form-control" type="text" name="search" aria-describedby="searchHelp"
                    hx-post="{% url 'search_school' %}"
                    hx-trigger="keyup changed delay:500ms"
                    hx-target="#search-results"
-                   hx-indicator=".htmx-indicator">
+                   hx-indicator=".htmx-indicator"
+                   placeholder="{% translate "To search for your school begin with typing school code or address or name..." %}">
+            <div id="searchHelp" class="form-text">
+              {% translate "You can search your school by:" %}
+              <ul>
+                <li>{% translate "School code" %}</li>
+                <li>{% translate "Street" %}</li>
+                <li>{% translate "Name" %}</li>
+              </ul>
+            </div>
 
             <table class="table">
                 <thead>

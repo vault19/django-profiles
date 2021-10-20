@@ -91,8 +91,7 @@ def search_school(request):
         schools = School.objects.filter(Q(name__icontains=request.POST['search']) |
                                         Q(district__icontains=request.POST['search']) |
                                         Q(address__street__icontains=request.POST['search']) |
-                                        Q(school_code__icontains=request.POST['search']) |
-                                        Q(ineko_id__icontains=request.POST['search'])
+                                        Q(school_code__icontains=request.POST['search'])
                                         ).filter().all()
 
         context['schools'] = schools
