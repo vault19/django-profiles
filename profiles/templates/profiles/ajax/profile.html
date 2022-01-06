@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load bootstrap5 %}
+
+<form method="post" action="{% url 'edit_profile' %}">
+  {% csrf_token %}
+  {% bootstrap_form user_form %}
+  {% bootstrap_form profile_form %}
+  <button class="btn btn-primary btn-block" type="submit"  name="save_profile">
+    <i class="fas fa-save"></i> {% translate "Save" %}
+  </button>
+</form>

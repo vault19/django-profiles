@@ -38,6 +38,7 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    avatar = models.ImageField(verbose_name=_("Avatar"), blank=True, null=True, upload_to='avatars/')
     address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, verbose_name=_("Phone"), blank=True, null=True)
     gender = models.CharField(max_length=1, verbose_name=_("Gender"), blank=True, null=True, choices=GENDER)
@@ -48,6 +49,9 @@ class Profile(models.Model):
                                 help_text=_("Metadata about user."))
     country = models.CharField(blank=True, null=True, max_length=2, choices=COUNTRY, default='SK',
                                verbose_name=_("Country"))
+    metadata = models.JSONField(
+        verbose_name=_("Metadata"), blank=True, null=True, help_text=_("Metadata about user.")
+    )
 
     def __str__(self):
         return f"{self.user}"

@@ -12,7 +12,7 @@ from profiles.models import School, Membership
 
 
 @login_required
-def my_profile(request):
+def full_profile(request):
     user = get_object_or_404(User, id=request.user.pk)
 
     user_form = UserProfileForm(instance=user)
@@ -80,20 +80,10 @@ def my_profile(request):
         "address_form": address_form,
     }
 
-    return render(request, 'profiles/profile.html', context=context)
+    return render(request, 'profiles/full_profile.html', context=context)
 
 
 @login_required
-def search_school(request):
-    context = {}
-
-    if request.method == 'POST' and 'search' in request.POST:
-        schools = School.objects.filter(Q(name__icontains=request.POST['search']) |
-                                        Q(address__street__icontains=request.POST['search']) |
-                                        Q(address__city__icontains=request.POST['search']) |
-                                        Q(school_code__icontains=request.POST['search'])
-                                        ).filter().all()
-
-        context['schools'] = schools
-
-    return render(request, 'profiles/school_search.html', context=context)
+def public_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'profiles/public_profile.html', context={'user': user})
