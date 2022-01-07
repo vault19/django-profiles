@@ -72,10 +72,10 @@ class Profile(models.Model):
 
             img = Image.open(self.avatar.path)
 
-            if img.height > 250 or img.width > 250:
-                output_size = (250, 250)
+            if img.height > profile_settings.AVATAR_MAX_HEIGHT or img.width > profile_settings.AVATAR_MAX_WIDTH:
+                output_size = (profile_settings.AVATAR_MAX_WIDTH, profile_settings.AVATAR_MAX_HEIGHT)
                 img.thumbnail(output_size)
-                img.save(self.avatar.path, quality=75)
+                img.save(self.avatar.path, quality=profile_settings.AVATAR_DEFAULT_QUALITY)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
