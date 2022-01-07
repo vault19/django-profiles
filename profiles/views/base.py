@@ -22,7 +22,7 @@ def full_profile(request):
     if request.method == 'POST':
         if 'save_profile' in request.POST:
             user_form = UserProfileForm(request.POST, instance=user)
-            profile_form = ProfileForm(request.POST, instance=user.profile)
+            profile_form = ProfileForm(request.POST, request.FILES, instance=user.profile)
 
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()

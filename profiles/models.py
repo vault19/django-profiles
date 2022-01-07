@@ -1,8 +1,14 @@
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from PIL import Image
+
+from profiles.validators import FileSizeValidator
+from profiles import settings as profile_settings
 
 ACCOUNT_TYPE = (
     ('PT', _('Primary School Teacher')),
@@ -38,7 +44,11 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    avatar = models.ImageField(verbose_name=_("Avatar"), blank=True, null=True, upload_to='avatars/')
+    avatar = models.ImageField(verbose_name=_("Avatar"), blank=True, null=True, upload_to='avatars',
+                               validators=[
+                                   FileExtensionValidator(["jpg", "jpeg", "png"]),
+                                   FileSizeValidator(profile_settings.AVATAR_MAX_FILE_SIZE),
+                               ])
     address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, verbose_name=_("Phone"), blank=True, null=True)
     gender = models.CharField(max_length=1, verbose_name=_("Gender"), blank=True, null=True, choices=GENDER)
@@ -55,6 +65,17 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+
+    def save(self, *args, **kwargs):
+        if self.avatar:
+            super().save(*args, **kwargs)
+
+            img = Image.open(self.avatar.path)
+
+            if img.height > 250 or img.width > 250:
+                output_size = (250, 250)
+                img.thumbnail(output_size)
+                img.save(self.avatar.path, quality=75)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
