@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -49,6 +49,11 @@ class Profile(models.Model):
                                    FileExtensionValidator(["jpg", "jpeg", "png"]),
                                    FileSizeValidator(profile_settings.AVATAR_MAX_FILE_SIZE),
                                ])
+    header_image = models.ImageField(verbose_name=_("Header image"), blank=True, null=True, upload_to='profile-headers',
+                               validators=[
+                                   FileExtensionValidator(["jpg", "jpeg", "png"]),
+                                   FileSizeValidator(profile_settings.HEADER_MAX_FILE_SIZE),
+                               ])
     address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, verbose_name=_("Phone"), blank=True, null=True)
     gender = models.CharField(max_length=1, verbose_name=_("Gender"), blank=True, null=True, choices=GENDER)
@@ -67,6 +72,8 @@ class Profile(models.Model):
         return f"{self.user}"
 
     def save(self, *args, **kwargs):
+        # TODO: process header image for public profile
+
         if self.avatar:
             super().save(*args, **kwargs)
 
