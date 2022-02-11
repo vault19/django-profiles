@@ -83,7 +83,8 @@ class Profile(models.Model):
                 output_size = (profile_settings.AVATAR_MAX_WIDTH, profile_settings.AVATAR_MAX_HEIGHT)
                 img.thumbnail(output_size)
                 img.save(self.avatar.path, quality=profile_settings.AVATAR_DEFAULT_QUALITY)
-
+        else:
+            super().save(*args, **kwargs)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def update_profile_signal(sender, instance, created, **kwargs):
