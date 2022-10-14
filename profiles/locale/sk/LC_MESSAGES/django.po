@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-10 22:32+0100\n"
+"POT-Creation-Date: 2022-10-14 18:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,90 +19,90 @@ msgstr ""
 
 #: django-profiles/profiles/models.py:14
 msgid "Primary School Teacher"
-msgstr "Učiteľ(ka) na základnej škole"
+msgstr "Učiteľ na ZŠ"
 
 #: django-profiles/profiles/models.py:15
 msgid "Secondary School Teacher"
-msgstr "Učiteľ(ka) na strednej škole"
+msgstr "Učiteľ na SŠ"
 
 #: django-profiles/profiles/models.py:16
 msgid "Student"
-msgstr "Študent(ka)"
+msgstr "Žiak ZŠ/SŠ"
 
 #: django-profiles/profiles/models.py:17
-msgid "Parent"
-msgstr "Rodič"
+msgid "Enthusiast"
+msgstr "Nadšenec"
 
-#: django-profiles/profiles/models.py:18
-msgid "Lecturer"
-msgstr "Lektor"
-
-#: django-profiles/profiles/models.py:19
-msgid "Other"
-msgstr "Iné"
-
-#: django-profiles/profiles/models.py:23
+#: django-profiles/profiles/models.py:21
 msgid "Male"
 msgstr "Muž"
 
-#: django-profiles/profiles/models.py:24
+#: django-profiles/profiles/models.py:22
 msgid "Female"
 msgstr "Žena"
 
-#: django-profiles/profiles/models.py:28
+#: django-profiles/profiles/models.py:26
 msgid "Slovakia"
 msgstr "Slovensko"
 
-#: django-profiles/profiles/models.py:29
+#: django-profiles/profiles/models.py:27
 msgid "Czechia"
 msgstr "Česko"
 
-#: django-profiles/profiles/models.py:30
+#: django-profiles/profiles/models.py:28
 msgid "Hungary"
 msgstr "Maďarsko"
 
-#: django-profiles/profiles/models.py:31
+#: django-profiles/profiles/models.py:29
 msgid "Poland"
 msgstr "Poľsko"
 
-#: django-profiles/profiles/models.py:36
+#: django-profiles/profiles/models.py:30
+msgid "Other (insert into note)"
+msgstr "Iná (vložte do poznámku)"
+
+#: django-profiles/profiles/models.py:35
 #: django-profiles/profiles/templates/profiles/full_profile.html:93
 #: django-profiles/profiles/templates/profiles/full_profile.html:103
 msgid "Street"
 msgstr "Ulica a číslo"
 
-#: django-profiles/profiles/models.py:37
+#: django-profiles/profiles/models.py:36
 #: django-profiles/profiles/templates/profiles/full_profile.html:104
 msgid "City"
 msgstr "Mesto"
 
-#: django-profiles/profiles/models.py:38
+#: django-profiles/profiles/models.py:37
 msgid "Postal code"
 msgstr "Poštové smerovacie číslo"
 
-#: django-profiles/profiles/models.py:39 django-profiles/profiles/models.py:66
+#: django-profiles/profiles/models.py:38 django-profiles/profiles/models.py:66
 msgid "Country"
 msgstr "Krajina"
 
+#: django-profiles/profiles/models.py:39
+msgid "Address note"
+msgstr "Poznámka k adrese"
+
 #: django-profiles/profiles/models.py:47
-msgid "Avatar"
-msgstr "Profilová fotka"
-
-#: django-profiles/profiles/models.py:52
-msgid "Header image"
-msgstr "Titulná fotka"
-
-#: django-profiles/profiles/models.py:58
 msgid "Phone"
 msgstr "Telefón"
 
-#: django-profiles/profiles/models.py:59
+#: django-profiles/profiles/models.py:48
+msgid "Header image"
+msgstr "Titulná fotka"
+
+#: django-profiles/profiles/models.py:54
 msgid "Gender"
 msgstr "Pohlavie"
 
-#: django-profiles/profiles/models.py:60
+#: django-profiles/profiles/models.py:55
 msgid "Account type"
 msgstr "Typ účtu"
+
+#: django-profiles/profiles/models.py:57
+msgid "Avatar"
+msgstr "Profilová fotka"
 
 #: django-profiles/profiles/models.py:62
 msgid "About me"
@@ -116,82 +116,90 @@ msgstr ""
 msgid "Metadata about user."
 msgstr ""
 
-#: django-profiles/profiles/models.py:96
+#: django-profiles/profiles/models.py:97
 #: django-profiles/profiles/templates/profiles/full_profile.html:94
 #: django-profiles/profiles/templates/profiles/full_profile.html:102
 msgid "Name"
 msgstr "Názov"
 
-#: django-profiles/profiles/models.py:97
+#: django-profiles/profiles/models.py:98
 msgid "Description"
 msgstr ""
 
-#: django-profiles/profiles/models.py:98
+#: django-profiles/profiles/models.py:99
 msgid "Brief description about school."
 msgstr ""
 
-#: django-profiles/profiles/models.py:101
+#: django-profiles/profiles/models.py:102
 msgid "District"
 msgstr ""
 
-#: django-profiles/profiles/models.py:102
+#: django-profiles/profiles/models.py:103
 msgid "Region"
 msgstr ""
 
-#: django-profiles/profiles/models.py:103
+#: django-profiles/profiles/models.py:104
 msgid "Founder"
 msgstr "Zakladateľ"
 
-#: django-profiles/profiles/models.py:104
+#: django-profiles/profiles/models.py:105
 msgid "School type"
 msgstr "Typ Školy"
 
-#: django-profiles/profiles/models.py:105
+#: django-profiles/profiles/models.py:106
 msgid "GPS X"
 msgstr ""
 
-#: django-profiles/profiles/models.py:106
+#: django-profiles/profiles/models.py:107
 msgid "GPS Y"
 msgstr ""
 
-#: django-profiles/profiles/models.py:107
+#: django-profiles/profiles/models.py:108
 #: django-profiles/profiles/templates/profiles/full_profile.html:92
 #: django-profiles/profiles/templates/profiles/full_profile.html:105
 #: django-profiles/profiles/templates/profiles/full_profile.html:185
 msgid "School code"
 msgstr "Kód školy"
 
-#: django-profiles/profiles/models.py:108
+#: django-profiles/profiles/models.py:109
 msgid "Ineko ID"
 msgstr ""
 
-#: django-profiles/profiles/models.py:109
+#: django-profiles/profiles/models.py:110
 msgid "Unprivileged"
 msgstr ""
 
-#: django-profiles/profiles/models.py:110
+#: django-profiles/profiles/models.py:111
 msgid "Email"
 msgstr ""
 
-#: django-profiles/profiles/models.py:111
 #: django-profiles/profiles/models.py:112
+#: django-profiles/profiles/models.py:113
 msgid "Email 3"
 msgstr ""
 
-#: django-profiles/profiles/models.py:113
+#: django-profiles/profiles/models.py:114
 msgid "Website"
 msgstr ""
 
-#: django-profiles/profiles/models.py:122
+#: django-profiles/profiles/models.py:123
 msgid "Effective from"
 msgstr ""
 
-#: django-profiles/profiles/models.py:123
+#: django-profiles/profiles/models.py:124
 msgid "Effective to"
 msgstr ""
 
-#: django-profiles/profiles/models.py:125
+#: django-profiles/profiles/models.py:126
 msgid "Replaced by"
+msgstr ""
+
+#: django-profiles/profiles/models.py:127
+msgid "Proof"
+msgstr "Doklad"
+
+#: django-profiles/profiles/models.py:132
+msgid "Verified"
 msgstr ""
 
 #: django-profiles/profiles/templates/profiles/ajax/form_generic.html:17
@@ -242,7 +250,8 @@ msgid "You can search your school by:"
 msgstr "Môžete vyhľadávať podľa:"
 
 #: django-profiles/profiles/templates/profiles/full_profile.html:131
-#: django-profiles/profiles/views/base.py:75
+#: django-profiles/profiles/views/base.py:91
+#: django-profiles/profiles/views/base.py:94
 msgid "My Profile"
 msgstr "Môj Profil"
 
@@ -275,18 +284,31 @@ msgid "Save Address"
 msgstr "Adresa"
 
 #: django-profiles/profiles/views/ajax.py:32
-#: django-profiles/profiles/views/base.py:31
+#: django-profiles/profiles/views/base.py:39
 msgid "Your profile has been saved."
 msgstr "Váš profil bol uložený."
 
 #: django-profiles/profiles/views/ajax.py:63
-#: django-profiles/profiles/views/base.py:42
+#: django-profiles/profiles/views/base.py:50
 msgid "Your address has been saved."
 msgstr "Váša adresa bola uložená."
 
-#: django-profiles/profiles/views/base.py:69
+#: django-profiles/profiles/views/base.py:77
 msgid "Your school has been saved."
 msgstr "Váša škola bola uložená."
+
+#: django-profiles/profiles/views/base.py:87
+msgid "Your membership document has been saved."
+msgstr "Dokument bol nahratý."
+
+#~ msgid "Lecturer"
+#~ msgstr "Lektor"
+
+#~ msgid "Parent"
+#~ msgstr "Rodič"
+
+#~ msgid "Other"
+#~ msgstr "Iné"
 
 #~ msgid "Begin typing (name or address) to search schools..."
 #~ msgstr "Začnite písať (názov alebo adresu) pre vyhľadanie školy..."

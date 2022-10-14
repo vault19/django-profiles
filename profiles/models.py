@@ -14,9 +14,7 @@ ACCOUNT_TYPE = (
     ('PT', _('Primary School Teacher')),
     ('ST', _('Secondary School Teacher')),
     ('S', _('Student')),
-    ('P', _('Parent')),
-    ('L', _('Lecturer')),
-    ('O', _('Other')),
+    ('O', _('Enthusiast')),
 )
 
 GENDER = (
@@ -29,6 +27,7 @@ COUNTRY = (
     ('CZ', _('Czechia')),
     ('HU', _('Hungary')),
     ('PL', _('Poland')),
+    ('XX', _('Other (insert into note)')),
 )
 
 
@@ -37,6 +36,7 @@ class Address(models.Model):
     city = models.CharField(max_length=250, verbose_name=_("City"))
     postal_code = models.CharField(max_length=250, verbose_name=_("Postal code"))
     country = models.CharField(max_length=2, verbose_name=_("Country"), choices=COUNTRY, default='SK')
+    note = models.CharField(max_length=250, verbose_name=_("Address note"), blank=True, null=True)
 
     def __str__(self):
         return f"{self.street}, {self.city} {self.postal_code} {self.country}"
@@ -44,21 +44,21 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    avatar = models.ImageField(verbose_name=_("Avatar"), blank=True, null=True, upload_to='avatars',
-                               validators=[
-                                   FileExtensionValidator(["jpg", "jpeg", "png"]),
-                                   FileSizeValidator(profile_settings.AVATAR_MAX_FILE_SIZE),
-                               ])
+    phone_number = models.CharField(max_length=15, verbose_name=_("Phone"), blank=True, null=True)
     header_image = models.ImageField(verbose_name=_("Header image"), blank=True, null=True, upload_to='profile-headers',
                                validators=[
                                    FileExtensionValidator(["jpg", "jpeg", "png"]),
                                    FileSizeValidator(profile_settings.HEADER_MAX_FILE_SIZE),
                                ])
     address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15, verbose_name=_("Phone"), blank=True, null=True)
     gender = models.CharField(max_length=1, verbose_name=_("Gender"), blank=True, null=True, choices=GENDER)
     account_type = models.CharField(max_length=2, verbose_name=_("Account type"), blank=True, null=True,
                                     choices=ACCOUNT_TYPE)
+    avatar = models.ImageField(verbose_name=_("Avatar"), blank=True, null=True, upload_to='avatars',
+                               validators=[
+                                   FileExtensionValidator(["jpg", "jpeg", "png"]),
+                                   FileSizeValidator(profile_settings.AVATAR_MAX_FILE_SIZE),
+                               ])
     about = models.TextField(blank=True, null=True, verbose_name=_("About me"))
     metadata = models.JSONField(blank=True, null=True, verbose_name=_("Metadata"),
                                 help_text=_("Metadata about user."))
@@ -124,6 +124,12 @@ class Membership(models.Model):
     effective_to = models.DateField(blank=True, null=True, verbose_name=_("Effective to"))
     replaced_by = models.ForeignKey('Membership', blank=True, null=True, on_delete=models.CASCADE, default=None,
                                     verbose_name=_("Replaced by"))
+    proof = models.ImageField(verbose_name=_("Proof"), blank=True, null=True, upload_to='profile-school-proof',
+                               validators=[
+                                   FileExtensionValidator(["jpg", "jpeg", "png"]),
+                                   FileSizeValidator(profile_settings.HEADER_MAX_FILE_SIZE),
+                               ])
+    verified = models.BooleanField(verbose_name=_("Verified"), default=False)
 
     def __str__(self):
         return f"{self.school}: {self.user}"

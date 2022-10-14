@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
-from django.forms import ModelForm, Form, IntegerField, TextInput
+from django.forms import ModelForm, Form, IntegerField, TextInput, ImageField, CharField
+from django.utils.translation import gettext_lazy as _
 
-from profiles.models import Address, Profile
+from profiles.models import Address, Profile, Membership
 
 
 class AddressForm(ModelForm):
@@ -20,7 +21,13 @@ class SchoolForm(Form):
     school_id = IntegerField()
 
 
+class ProofForm(ModelForm):
+    class Meta:
+        model = Membership
+        fields = ["proof"]
+
+
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        exclude = ('user', 'address', 'country', 'metadata')
+        exclude = ('user', 'address', 'country', 'metadata', 'header_image')

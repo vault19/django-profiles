@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
-from profiles.forms import AddressForm, UserProfileForm, SchoolForm, ProfileForm
+from profiles.forms import AddressForm, UserProfileForm, SchoolForm, ProfileForm, ProofForm
 from profiles.models import School, Membership
 
 
@@ -18,6 +18,14 @@ def full_profile(request):
     user_form = UserProfileForm(instance=user)
     profile_form = ProfileForm(instance=user.profile)
     address_form = AddressForm(instance=user.profile.address)
+
+    memberships = Membership.objects.filter(user=request.user, replaced_by=None)
+    if memberships.count():
+        membership = memberships[0]
+        proof_form = ProofForm(instance=membership)
+    else:
+        proof_form = None
+        membership = None
 
     if request.method == 'POST':
         if 'save_profile' in request.POST:
@@ -69,7 +77,18 @@ def full_profile(request):
                 messages.success(request, _("Your school has been saved."))
                 return redirect("profile")
 
+        if 'save_proof' in request.POST:
+            membership = Membership.objects.filter(user=request.user, replaced_by=None)[0]
+            proof_form = ProofForm(request.POST, request.FILES, instance=membership)
+
+            if proof_form.is_valid():
+                proof = proof_form.save()
+
+                messages.success(request, _("Your membership document has been saved."))
+                return redirect("profile")
+
     context = {
+        "page_tab_title": _("My Profile"),
         "breadcrumbs": [
             {
                 "title": _("My Profile"),
@@ -78,6 +97,8 @@ def full_profile(request):
         "user_form": user_form,
         "profile_form": profile_form,
         "address_form": address_form,
+        "proof_form": proof_form,
+        "membership": membership,
     }
 
     return render(request, 'profiles/full_profile.html', context=context)
