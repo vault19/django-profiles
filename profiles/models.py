@@ -50,7 +50,7 @@ class Profile(models.Model):
                                    FileExtensionValidator(["jpg", "jpeg", "png"]),
                                    FileSizeValidator(profile_settings.HEADER_MAX_FILE_SIZE),
                                ])
-    address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, blank=True, null=True, on_delete=models.RESTRICT)
     gender = models.CharField(max_length=1, verbose_name=_("Gender"), blank=True, null=True, choices=GENDER)
     account_type = models.CharField(max_length=2, verbose_name=_("Account type"), blank=True, null=True,
                                     choices=ACCOUNT_TYPE)
@@ -86,6 +86,7 @@ class Profile(models.Model):
         else:
             super().save(*args, **kwargs)
 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def update_profile_signal(sender, instance, created, **kwargs):
     if created:
@@ -97,7 +98,7 @@ class School(models.Model):
     name = models.CharField(max_length=250, verbose_name=_("Name"))
     description = models.TextField(blank=True, null=True, verbose_name=_("Description"),
                                    help_text=_('Brief description about school.'))
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.RESTRICT)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Membership', blank=True)
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("District"))
     region = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Region"))
@@ -105,13 +106,18 @@ class School(models.Model):
     school_type = models.CharField(max_length=50, verbose_name=_("School type"), blank=True, null=True)
     gps_x = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("GPS X"))
     gps_y = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("GPS Y"))
-    school_code = models.CharField(max_length=50, verbose_name=_("School code"), blank=True, null=True)
-    ineko_id = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Ineko ID"))
+    school_code = models.CharField(max_length=50, verbose_name=_("KODSKO"), blank=True, null=True)
+    edu_id = models.CharField(max_length=50, verbose_name=_("EDUID"), blank=True, null=True)
+    ineko_id = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("INEKO ID"))
     underprivileged = models.IntegerField(blank=True, null=True, verbose_name=_("Unprivileged"))
+    number_of_students = models.IntegerField(blank=True, null=True, verbose_name=_("Number of Students"))
     mail = models.CharField(blank=True, null=True, max_length=100, verbose_name=_("Email"))
     mail2 = models.CharField(blank=True, null=True, max_length=100, verbose_name=_("Email 3"))
     mail3 = models.CharField(blank=True, null=True, max_length=100, verbose_name=_("Email 3"))
     website = models.CharField(blank=True, null=True, max_length=100, verbose_name=_("Website"))
+
+    timestamp_added = models.DateTimeField(verbose_name=_("Added"), auto_now_add=True)
+    timestamp_modified = models.DateTimeField(verbose_name=_("Modified"), auto_now=True)
 
     def __str__(self):
         return f"{self.name} – {self.address} ({self.school_type})"
@@ -119,10 +125,10 @@ class School(models.Model):
 
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.RESTRICT)
     effective_from = models.DateField(blank=True, null=True, verbose_name=_("Effective from"))
     effective_to = models.DateField(blank=True, null=True, verbose_name=_("Effective to"))
-    replaced_by = models.ForeignKey('Membership', blank=True, null=True, on_delete=models.CASCADE, default=None,
+    replaced_by = models.ForeignKey('Membership', blank=True, null=True, on_delete=models.RESTRICT, default=None,
                                     verbose_name=_("Replaced by"))
     proof = models.ImageField(verbose_name=_("Proof"), blank=True, null=True, upload_to='profile-school-proof',
                                validators=[

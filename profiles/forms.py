@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.forms import ModelForm, Form, IntegerField, TextInput, ImageField, CharField
+from django.forms import ModelForm, Form, IntegerField, TextInput, ImageField, BooleanField, FileField, DateField
 from django.utils.translation import gettext_lazy as _
 
 from profiles.models import Address, Profile, Membership
@@ -31,3 +31,22 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         exclude = ('user', 'address', 'country', 'metadata', 'header_image')
+
+
+class UpdateSchoolsCVTIForm(Form):
+    cvti_file = FileField(
+        required=False,
+        label="Register ŠaŠZ z https://crinfo.iedu.sk/risportal/register/",
+    )
+    store_changes_in_db = BooleanField(required=False, label='Store changes in DB (when unchecked, DB is not changed)')
+
+
+class UpdateSchoolsINEKOForm(Form):
+    file_zoznam_skol = FileField()
+    file_udaje = FileField()
+    file_doplnujuce_udaje = FileField()
+    file_percentily = FileField()
+    file_celkove_hodnotenie = FileField()
+    file_polrocne_hodnotenie = FileField()
+    file_cvc = FileField()
+    date_of_data_collection = DateField()
