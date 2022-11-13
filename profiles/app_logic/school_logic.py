@@ -120,32 +120,32 @@ class UpdateSchoolsCVTI:
         ]
         df = df.drop(df[df.TypSaSZ.isin(typ_sasz_to_del)].index)
 
-        # for index, row in df.iterrows():
-        #     school = School.objects.filter(school_code=row['KODSKO'])
-        #     change = f"{row['EDUID']}, {row['KODSKO']}, {row['ICO']}, {row['Nazov']}, {school}"
+        for index, row in df.iterrows():
+            school = School.objects.filter(school_code=row['KODSKO'])
+            change = f"{row['EDUID']}, {row['KODSKO']}, {row['ICO']}, {row['Nazov']}, {school}"
+
+            if school.count() == 1:
+                changes_in_db_paired.append(change)
+            elif school.count() > 1:
+                changes_in_db_error.append(change)
+            else:
+                changes_in_db_unpaired_new.append(change)
+
+        # schools = School.objects.all()
+        # kodsko_cvti = df["KODSKO"].values.tolist()
         #
-        #     if school.count() == 1:
-        #         changes_in_db_paired.append(change)
-        #     elif school.count() > 1:
-        #         changes_in_db_error.append(change)
-        #     else:
-        #         changes_in_db_unpaired_new.append(change)
-
-        schools = School.objects.all()
-        kodsko_cvti = df["KODSKO"].values.tolist()
-
-        for school in schools:
-            change = f"{school.school_code}, {school.edu_id}, {school}, {school.members.all().count()} memberships"
-            if school.school_code and int(school.school_code) not in kodsko_cvti:
-                if school.members.all().count() == 0:
-                    if self.test_run:
-                        msg_prefix = f"WOULD DELETE: "
-                    else:
-                        msg_prefix = "DELETING: "
-                        school.delete()
-                else:
-                    msg_prefix = "LEAVING: "
-                changes_in_db_unpaired_old.append(msg_prefix + change)
+        # for school in schools:
+        #     change = f"{school.school_code}, {school.edu_id}, {school}, {school.members.all().count()} memberships"
+        #     if school.school_code and int(school.school_code) not in kodsko_cvti:
+        #         if school.members.all().count() == 0:
+        #             if self.test_run:
+        #                 msg_prefix = f"WOULD DELETE: "
+        #             else:
+        #                 msg_prefix = "DELETING: "
+        #                 school.delete()
+        #         else:
+        #             msg_prefix = "LEAVING: "
+        #         changes_in_db_unpaired_old.append(msg_prefix + change)
 
         school_change_messages = [
             f"**changes_in_db_paired {len(changes_in_db_paired)}**",
