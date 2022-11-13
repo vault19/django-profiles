@@ -174,6 +174,9 @@ class UpdateSchoolsCVTI:
                     old_value = getattr(school, db_field_name)
                     new_value = row[df_column_name]
 
+                    if pandas.isnull(row[df_column_name]):
+                        continue
+
                     if self.test_run:
                         msg_prefix = f"WOULD CHANGE:"
                     else:
