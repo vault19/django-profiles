@@ -11,7 +11,11 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class SchoolAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['school_code', 'address__street', 'address__city', 'name']
+    list_display = ('name', 'address', 'school_code', 'members_count')
+
+    def members_count(self, obj):
+        return obj.members.all().count()
 
 
 class MembershipAdmin(admin.ModelAdmin):

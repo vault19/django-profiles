@@ -1,5 +1,7 @@
 import pandas
 
+from django.db.models import Count
+
 from profiles.models import Membership, Profile, School
 
 
@@ -17,8 +19,6 @@ class UpdateSchoolsCVTI:
         """
 
         school_change_messages = []
-
-
 
         # Select schools that are not part of a bigger school (based in their EDUID)
         df_merged = self.df.drop(self.df[self.df.EDUID == self.df.KmenovaSaSZ_EDUID].index)
@@ -51,13 +51,46 @@ class UpdateSchoolsCVTI:
 
         return school_change_messages
 
-    def update_with_new_schools(self):
+    def delete_duplicate_school_codes(self):
+        msg = []
+
+        dup_schools = School.objects.values('school_code').annotate(school_code_count=Count('school_code'))
+        dup_schools = dup_schools.exclude(school_code_count=1).order_by('school_code')
+
+        for school_code in dup_schools:
+            schools = School.objects.filter(school_code=school_code['school_code'])
+
+            all_members = 0
+            for school in schools:
+                members = school.members.all().count()
+                all_members += members
+
+            if all_members == 0:
+
+                school = schools[0]
+                members = school.members.all().count()
+                msg.append(f"LEAVING {school.school_code}, {school}, {members} members")
+
+                for school in schools[1:]:
+                    members = school.members.all().count()
+                    if self.test_run:
+                        msg.append(f"WOULD DELETE {school.school_code}, {school}, {members} members")
+                    else:
+                        msg.append(f"DELETING {school.school_code}, {school}, {members} members")
+                        school.delete()
+            else:
+                for school in schools:
+                    members = school.members.all().count()
+                    msg.append(f"LEAVING {school.school_code}, {school}, {members} members")
+
+        return msg
+
+    def overview(self):
 
         changes_in_db_paired = []
         changes_in_db_unpaired_new = []
         changes_in_db_unpaired_old = []
         changes_in_db_error = []
-        changes_in_db_merged = []
 
         # Drop schools that are part of a bigger school (based in their EDUID)
         df = self.df.drop(self.df[self.df.EDUID != self.df.KmenovaSaSZ_EDUID].index)
@@ -86,3 +119,16 @@ class UpdateSchoolsCVTI:
             change = f"{school.school_code}, {school.edu_id}, {school}, {school.members.all().count()} memberships"
             if school.school_code and int(school.school_code) not in kodsko_cvti:
                 changes_in_db_unpaired_old.append(change)
+
+        school_change_messages = [
+            f"**changes_in_db_paired {len(changes_in_db_paired)}**",
+            changes_in_db_paired,
+            f"**changes_in_db_unpaired_new {len(changes_in_db_unpaired_new)}**",
+            changes_in_db_unpaired_new,
+            f"**changes_in_db_unpaired_old {len(changes_in_db_unpaired_old)}**",
+            changes_in_db_unpaired_old,
+            f"**changes_in_db_error {len(changes_in_db_error)}**",
+            changes_in_db_error,
+        ]
+
+        return school_change_messages
