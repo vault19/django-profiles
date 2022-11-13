@@ -103,7 +103,7 @@ class School(models.Model):
     district = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("District"))
     region = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Region"))
     founder = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Founder"))
-    school_type = models.CharField(max_length=50, verbose_name=_("School type"), blank=True, null=True)
+    school_type = models.CharField(max_length=250, verbose_name=_("School type"), blank=True, null=True)
     gps_x = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("GPS X"))
     gps_y = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("GPS Y"))
     school_code = models.CharField(max_length=50, verbose_name=_("KODSKO"), blank=True, null=True)
