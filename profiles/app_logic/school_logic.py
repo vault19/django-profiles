@@ -13,7 +13,7 @@ class UpdateSchoolsCVTI:
         self.test_run = not store_changes_in_db
 
     def execute(self):
-        return self.add_leading_zero()
+        return self.overview()
 
     def delete_child_schools(self):
         """
@@ -132,45 +132,50 @@ class UpdateSchoolsCVTI:
             elif school.count() > 1:
                 changes_in_db_error.append(change)
             else:
+
+
+                if row['Ulica'] is not pandas.np.nan:
+                    street = f"{row['Ulica']}"
+                else:
+                    street = f"{row['Obec']}"
+
+                if row['SupisneCislo'] is not pandas.np.nan and row['OrientacneCislo'] is not pandas.np.nan:
+                    street += f" {row['SupisneCislo']}/{row['OrientacneCislo']}"
+                elif row['SupisneCislo'] is not pandas.np.nan:
+                    street += f" {row['SupisneCislo']}"
+                else:
+                    street += f" {row['OrientacneCislo']}"
+
+                new_address = Address(
+                    street=street,
+                    city=f"{row['Obec']}",
+                    postal_code=f"{row['PSC']}",
+                    country='SK',
+                )
+
+                if not self.test_run:
+                    new_address.save()
+
+                new_school = School(
+                    name=row['Nazov'],
+                    description="",
+                    address=new_address,
+                    district=row['Okres'],
+                    region=row['Kraj'],
+                    founder=row['Zriadovatel_Typ'],
+                    school_type=row['TypSaSZ'],
+                    school_code=row['KODSKO'],
+                    edu_id=row['EDUID'],
+                    mail=row['Email'],
+                    website=row['Web'],
+                )
+
                 if self.test_run:
                     msg_prefix = f"WOULD ADD: "
                 else:
                     msg_prefix = "ADDING: "
-
-                    if row['Ulica'] is not pandas.np.nan:
-                        street = f"{row['Ulica']}"
-                    else:
-                        street = f"{row['Obec']}"
-
-                    if row['SupisneCislo'] is not pandas.np.nan and row['OrientacneCislo'] is not pandas.np.nan:
-                        street += f" {row['SupisneCislo']}/{row['OrientacneCislo']}"
-                    elif row['SupisneCislo'] is not pandas.np.nan:
-                        street += f" {row['SupisneCislo']}"
-                    else:
-                        street += f" {row['OrientacneCislo']}"
-
-                    new_address = Address(
-                        street=street,
-                        city=f"{row['Obec']}",
-                        postal_code=f"{row['PSC']}",
-                        country='SK',
-                    )
-                    new_address.save()
-
-                    new_school = School(
-                        name=row['Nazov'],
-                        description="",
-                        address=new_address,
-                        district=row['Okres'],
-                        region=row['Kraj'],
-                        founder=row['Zriadovatel_Typ'],
-                        school_type=row['TypSaSZ'],
-                        school_code=row['KODSKO'],
-                        edu_id=row['EDUID'],
-                        mail=row['Email'],
-                        website=row['Web'],
-                    )
                     new_school.save()
+
                 changes_in_db_unpaired_new.append(msg_prefix + change)
 
         schools = School.objects.all()
