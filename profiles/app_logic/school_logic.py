@@ -12,6 +12,9 @@ class UpdateSchoolsCVTI:
         self.df = pandas.read_csv(file, sep=';')
         self.test_run = not store_changes_in_db
 
+    def execute(self):
+        return self.overview()
+
     def delete_child_schools(self):
         """
         Delete Child schools if it has no members. Child schools with members are skipped.
@@ -101,16 +104,32 @@ class UpdateSchoolsCVTI:
         # Drop nurseries, language schools and art schools
         df = df.drop(df[df.DruhSaSZ.isin(["jazyková škola", "materská škola", "základná umelecká škola"])].index)
 
-        for index, row in df.iterrows():
-            school = School.objects.filter(school_code=row['KODSKO'])
-            change = f"{row['EDUID']}, {row['KODSKO']}, {row['ICO']}, {row['Nazov']}, {school}"
+        typ_sasz_to_del = [
+            "MŠ pri zdravotníckom zariadení",
+            "ŠMŠ pre deti s autizmom",
+            "ŠMŠ pre deti s narušenou komunikačnou schopnosťou",
+            "ŠMŠ pre deti s narušenou komunikačnou schopnosťou internátna",
+            "ŠMŠ pre deti so sluchovým postihnutím internátna",
+            "ŠMŠ pre deti so zrakovým postihnutím",
+            "ŠMŠ pre deti so zrakovým postihnutím internátna",
+            "ŠMŠ pre deti s telesným postihnutím",
+            "ŠMŠ pre deti s viacnásobným postihnutím internátna",
+            "ŠMŠ pri špeciálnom výchovnom zariadení",
+            "Špeciálna materská škola",
+            "Špec.materská škola internátna",
+        ]
+        df = df.drop(df[df.TypSaSZ.isin(typ_sasz_to_del)].index)
 
-            if school.count() == 1:
-                changes_in_db_paired.append(change)
-            elif school.count() > 1:
-                changes_in_db_error.append(change)
-            else:
-                changes_in_db_unpaired_new.append(change)
+        # for index, row in df.iterrows():
+        #     school = School.objects.filter(school_code=row['KODSKO'])
+        #     change = f"{row['EDUID']}, {row['KODSKO']}, {row['ICO']}, {row['Nazov']}, {school}"
+        #
+        #     if school.count() == 1:
+        #         changes_in_db_paired.append(change)
+        #     elif school.count() > 1:
+        #         changes_in_db_error.append(change)
+        #     else:
+        #         changes_in_db_unpaired_new.append(change)
 
         schools = School.objects.all()
         kodsko_cvti = df["KODSKO"].values.tolist()
@@ -118,17 +137,25 @@ class UpdateSchoolsCVTI:
         for school in schools:
             change = f"{school.school_code}, {school.edu_id}, {school}, {school.members.all().count()} memberships"
             if school.school_code and int(school.school_code) not in kodsko_cvti:
-                changes_in_db_unpaired_old.append(change)
+                if school.members.all().count() == 0:
+                    if self.test_run:
+                        msg_prefix = f"WOULD DELETE: "
+                    else:
+                        msg_prefix = "DELETING: "
+                        school.delete()
+                else:
+                    msg_prefix = "LEAVING: "
+                changes_in_db_unpaired_old.append(msg_prefix + change)
 
         school_change_messages = [
             f"**changes_in_db_paired {len(changes_in_db_paired)}**",
-            changes_in_db_paired,
+            *changes_in_db_paired,
             f"**changes_in_db_unpaired_new {len(changes_in_db_unpaired_new)}**",
-            changes_in_db_unpaired_new,
+            *changes_in_db_unpaired_new,
             f"**changes_in_db_unpaired_old {len(changes_in_db_unpaired_old)}**",
-            changes_in_db_unpaired_old,
+            *changes_in_db_unpaired_old,
             f"**changes_in_db_error {len(changes_in_db_error)}**",
-            changes_in_db_error,
+            *changes_in_db_error,
         ]
 
         return school_change_messages
