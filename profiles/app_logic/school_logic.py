@@ -13,88 +13,84 @@ class UpdateSchoolsCVTI:
         self.test_run = not store_changes_in_db
 
     def execute(self):
-        return self.delete_child_schools()
+        return self._overview()
 
-    def delete_child_schools(self):
-        """
-        Delete Child schools if it has no members. Child schools with members are skipped.
-        GPS coordinates are transferred to parent schools (which are created if they do not exist).
-        """
+    # def delete_child_schools(self):
+    #     """
+    #     THIS SCRIPT WAS USED FOR A VERY SPECIFIC TASK. IT HAS TO BE RE-WRITTEN TO FUNCTION RELIABLY
+    #     """
+    #
+    #     school_change_messages = []
+    #
+    #     # Select schools that are not part of a bigger school (based in their EDUID)
+    #     df_merged = self.df.drop(self.df[self.df.EDUID == self.df.KmenovaSaSZ_EDUID].index)
+    #
+    #     schools = School.objects.all()
+    #     kodsko_cvti_merged = df_merged["KODSKO"].values.tolist()
+    #
+    #     i = 0
+    #     for school in schools:
+    #
+    #         # If a schools has a 'parent' deal with it
+    #         if school.school_code and school.school_code in kodsko_cvti_merged:
+    #
+    #             new_school_code_series = df_merged.loc[df_merged['KODSKO'] == school.school_code, 'KmenovaSaSZ_KODSKO']
+    #
+    #             old_school_code = school.school_code
+    #
+    #             if new_school_code_series.size:
+    #                 school.school_code = new_school_code_series.iloc[0]
+    #
+    #                 if self.test_run:
+    #                     msg_prefix = f"DRY RUN: "
+    #                 else:
+    #                     msg_prefix = ""
+    #                     school.save()
+    #
+    #                 school_change_messages.append(f"{msg_prefix}CHANGE OF CODE from {old_school_code} "
+    #                                               f"to {school.school_code}, "
+    #                                               f"{school}, {school.members.all().count()} members")
+    #
+    #     return school_change_messages
 
-        school_change_messages = []
+    # def delete_duplicate_school_codes(self):
+    #     """
+    #     THIS SCRIPT WAS USED FOR A VERY SPECIFIC TASK. IT HAS TO BE RE-WRITTEN TO FUNCTION RELIABLY
+    #     """
+    #     msg = []
+    #
+    #     dup_schools = School.objects.values('school_code').annotate(school_code_count=Count('school_code'))
+    #     dup_schools = dup_schools.exclude(school_code_count=1).order_by('school_code')
+    #
+    #     for school_code in dup_schools:
+    #         schools = School.objects.filter(school_code=school_code['school_code'])
+    #
+    #         all_members = 0
+    #         for school in schools:
+    #             members = school.members.all().count()
+    #             all_members += members
+    #
+    #         if all_members == 0:
+    #
+    #             school = schools[0]
+    #             members = school.members.all().count()
+    #             msg.append(f"LEAVING {school.school_code}, {school}, {members} members")
+    #
+    #             for school in schools[1:]:
+    #                 members = school.members.all().count()
+    #                 if self.test_run:
+    #                     msg.append(f"WOULD DELETE {school.school_code}, {school}, {members} members")
+    #                 else:
+    #                     msg.append(f"DELETING {school.school_code}, {school}, {members} members")
+    #                     school.delete()
+    #         else:
+    #             for school in schools:
+    #                 members = school.members.all().count()
+    #                 msg.append(f"LEAVING {school.school_code}, {school}, {members} members")
+    #
+    #     return msg
 
-        # Select schools that are not part of a bigger school (based in their EDUID)
-        df_merged = self.df.drop(self.df[self.df.EDUID == self.df.KmenovaSaSZ_EDUID].index)
-
-        schools = School.objects.all()
-        kodsko_cvti_merged = df_merged["KODSKO"].values.tolist()
-
-        i = 0
-        for school in schools:
-
-            # If a schools has a 'parent' deal with it
-            if school.school_code and school.school_code in kodsko_cvti_merged:
-
-                new_school_code_series = df_merged.loc[df_merged['KODSKO'] == school.school_code, 'KmenovaSaSZ_KODSKO']
-
-                old_school_code = school.school_code
-
-                if new_school_code_series.size:
-                    school.school_code = new_school_code_series.iloc[0]
-
-                    if self.test_run:
-                        msg_prefix = f"DRY RUN: "
-                    else:
-                        msg_prefix = ""
-                        school.save()
-
-                    school_change_messages.append(f"{msg_prefix}CHANGE OF CODE from {old_school_code} "
-                                                  f"to {school.school_code}, "
-                                                  f"{school}, {school.members.all().count()} members")
-
-        return school_change_messages
-
-    def delete_duplicate_school_codes(self):
-        msg = []
-
-        dup_schools = School.objects.values('school_code').annotate(school_code_count=Count('school_code'))
-        dup_schools = dup_schools.exclude(school_code_count=1).order_by('school_code')
-
-        for school_code in dup_schools:
-            schools = School.objects.filter(school_code=school_code['school_code'])
-
-            all_members = 0
-            for school in schools:
-                members = school.members.all().count()
-                all_members += members
-
-            if all_members == 0:
-
-                school = schools[0]
-                members = school.members.all().count()
-                msg.append(f"LEAVING {school.school_code}, {school}, {members} members")
-
-                for school in schools[1:]:
-                    members = school.members.all().count()
-                    if self.test_run:
-                        msg.append(f"WOULD DELETE {school.school_code}, {school}, {members} members")
-                    else:
-                        msg.append(f"DELETING {school.school_code}, {school}, {members} members")
-                        school.delete()
-            else:
-                for school in schools:
-                    members = school.members.all().count()
-                    msg.append(f"LEAVING {school.school_code}, {school}, {members} members")
-
-        return msg
-
-    def overview(self):
-
-        changes_in_db_paired = []
-        changes_in_db_unpaired_new = []
-        changes_in_db_unpaired_old = []
-        changes_in_db_error = []
-
+    def _get_cleaned_df(self):
         # Drop schools that are part of a bigger school (based in their EDUID)
         df = self.df.drop(self.df[self.df.EDUID != self.df.KmenovaSaSZ_EDUID].index)
 
@@ -123,28 +119,105 @@ class UpdateSchoolsCVTI:
         ]
         df = df.drop(df[df.TypSaSZ.isin(typ_sasz_to_del)].index)
 
-        for index, row in df.iterrows():
-            school = School.objects.filter(school_code=row['KODSKO'])
-            change = f"{row['EDUID']}, {row['KODSKO']}, {row['ICO']}, {row['Nazov']}, {school}"
+        return df
 
-            if school.count() == 1:
+    def _contruct_street_from_pd_row(self, row):
+
+        if row['Ulica'] is not pandas.np.nan:
+            street = f"{row['Ulica']}"
+        else:
+            street = f"{row['Obec']}"
+
+        if row['SupisneCislo'] is not pandas.np.nan and row['OrientacneCislo'] is not pandas.np.nan:
+            street += f" {row['SupisneCislo']}/{row['OrientacneCislo']}"
+        elif row['SupisneCislo'] is not pandas.np.nan:
+            street += f" {row['SupisneCislo']}"
+        else:
+            street += f" {row['OrientacneCislo']}"
+
+        return street
+
+    def _overview(self):
+
+        changes_in_db_paired = []
+        changes_in_db_unpaired_new = []
+        changes_in_db_unpaired_old = []
+        changes_in_db_error = []
+
+        df = self._get_cleaned_df()
+
+        for index, row in df.iterrows():
+            schools = School.objects.filter(school_code=row['KODSKO'])
+            change = f"{row['KODSKO']} - {row['Nazov']}, {schools}"
+
+            # If school is successfully paired, compare individual fields
+            if schools.count() == 1:
                 changes_in_db_paired.append(change)
-            elif school.count() > 1:
+
+                school = schools[0]
+
+                fields_to_check = {
+                    'name': 'Nazov',
+                    'district': 'Okres',
+                    'region': 'Kraj',
+                    'founder': 'Zriadovatel_Typ',
+                    'school_type': 'TypSaSZ',
+                    'edu_id': 'EDUID',
+                    'mail': 'Email',
+                    'website': 'Web',
+                }
+
+                for key in fields_to_check.keys():
+                    db_field_name = key
+                    df_column_name = fields_to_check[db_field_name]
+
+                    old_value = getattr(school, db_field_name)
+                    new_value = row[df_column_name]
+
+                    if self.test_run:
+                        msg_prefix = f"WOULD CHANGE:"
+                    else:
+                        msg_prefix = "CHANGING:"
+
+                    if new_value != old_value:
+                        if not self.test_run:
+                            setattr(school, db_field_name, row[df_column_name])
+                            school.save()
+
+                        changes_in_db_paired.append(f"{msg_prefix} {old_value} --> {new_value}")
+
+                # Address
+                old_street = school.address.street
+                old_city = school.address.city
+                old_postal_code = school.address.postal_code
+
+                new_street = self._contruct_street_from_pd_row(row)
+                new_city = row['Obec']
+                new_postal_code = row['PSC']
+
+                if old_street != new_street:
+                    school.address.street = new_street
+                    changes_in_db_paired.append(f"{msg_prefix} {old_street} --> {new_street}")
+
+                if old_city != new_city:
+                    school.address.city = new_city
+                    changes_in_db_paired.append(f"{msg_prefix} {old_city} --> {new_city}")
+
+                if old_postal_code != new_postal_code:
+                    school.address.postal_code = new_postal_code
+                    changes_in_db_paired.append(f"{msg_prefix} {old_postal_code} --> {new_postal_code}")
+
+                if not self.test_run:
+                    school.address.save()
+
+            # If more than one school has the same school_code, add an error msg
+            elif schools.count() > 1:
                 changes_in_db_error.append(change)
+
+            # If no school was found in the database, add a new one
             else:
 
-
-                if row['Ulica'] is not pandas.np.nan:
-                    street = f"{row['Ulica']}"
-                else:
-                    street = f"{row['Obec']}"
-
-                if row['SupisneCislo'] is not pandas.np.nan and row['OrientacneCislo'] is not pandas.np.nan:
-                    street += f" {row['SupisneCislo']}/{row['OrientacneCislo']}"
-                elif row['SupisneCislo'] is not pandas.np.nan:
-                    street += f" {row['SupisneCislo']}"
-                else:
-                    street += f" {row['OrientacneCislo']}"
+                street = self._contruct_street_from_pd_row(row)
 
                 new_address = Address(
                     street=street,
