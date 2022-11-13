@@ -13,7 +13,7 @@ class UpdateSchoolsCVTI:
         self.test_run = not store_changes_in_db
 
     def execute(self):
-        return self.overview()
+        return self.delete_child_schools()
 
     def delete_child_schools(self):
         """
